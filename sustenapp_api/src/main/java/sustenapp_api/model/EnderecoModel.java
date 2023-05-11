@@ -23,6 +23,6 @@ public class EnderecoModel implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private String logradouro, complemento, cep, ciade, estado;
+    private String logradouro, complemento, cep, cidade, estado;
     private UUID usuario;
 }

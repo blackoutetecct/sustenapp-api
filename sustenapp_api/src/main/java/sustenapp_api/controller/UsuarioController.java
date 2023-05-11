@@ -35,7 +35,9 @@ public class UsuarioController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<UsuarioModel>> listAll() {
+    public ResponseEntity<List<UsuarioModel>> listAll(@RequestParam(required = false) boolean full) {
+        if(full)
+            return ResponseEntity.status(HttpStatus.OK).body(usuarioService.listAllFull());
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.listAll());
     }
 }
