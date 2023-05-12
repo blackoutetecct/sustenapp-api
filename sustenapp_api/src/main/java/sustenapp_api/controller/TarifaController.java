@@ -1,12 +1,9 @@
 package sustenapp_api.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sustenapp_api.dto.PreferenciaDto;
-import sustenapp_api.model.PreferenciaModel;
 import sustenapp_api.model.TarifaModel;
 import sustenapp_api.service.TarifaService;
 

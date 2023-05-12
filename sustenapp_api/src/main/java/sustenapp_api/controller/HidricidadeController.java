@@ -23,6 +23,11 @@ public class HidricidadeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(hidricidadeService.save(hidricidade));
     }
 
+    @PutMapping("")
+    public ResponseEntity<HidricidadeModel> update(@RequestBody HidricidadeModel hidricidade) {
+        return ResponseEntity.status(HttpStatus.OK).body(hidricidadeService.update(hidricidade));
+    }
+
     @DeleteMapping("")
     public ResponseEntity<Void> delete(@RequestParam UUID id) {
         hidricidadeService.delete(id);

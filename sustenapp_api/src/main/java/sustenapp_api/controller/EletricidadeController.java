@@ -23,6 +23,11 @@ public class EletricidadeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(eletricidadeService.save(eletricidade));
     }
 
+    @PutMapping("")
+    public ResponseEntity<EletricidadeModel> update(@RequestBody EletricidadeModel eletricidade) {
+        return ResponseEntity.status(HttpStatus.OK).body(eletricidadeService.update(eletricidade));
+    }
+
     @DeleteMapping("")
     public ResponseEntity<Void> delete(@RequestParam UUID id) {
         eletricidadeService.delete(id);

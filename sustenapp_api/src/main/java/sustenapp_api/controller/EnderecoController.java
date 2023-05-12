@@ -23,6 +23,11 @@ public class EnderecoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(enderecoService.save(endereco));
     }
 
+    @PostMapping("")
+    public ResponseEntity<EnderecoModel> update(@RequestBody EnderecoModel endereco) {
+        return ResponseEntity.status(HttpStatus.OK).body(enderecoService.update(endereco));
+    }
+
     @DeleteMapping("")
     public ResponseEntity<Void> delete(@RequestParam UUID id) {
         enderecoService.delete(id);

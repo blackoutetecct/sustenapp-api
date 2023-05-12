@@ -23,6 +23,11 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuario));
     }
 
+    @PutMapping("")
+    public ResponseEntity<UsuarioModel> update(@RequestBody UsuarioModel usuario) {
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.update(usuario));
+    }
+
     @DeleteMapping("")
     public ResponseEntity<Void> delete(@RequestParam UUID id) {
         usuarioService.delete(id);

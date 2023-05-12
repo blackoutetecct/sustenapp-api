@@ -23,6 +23,11 @@ public class TelefoneController {
         return ResponseEntity.status(HttpStatus.CREATED).body(telefoneService.save(telefone));
     }
 
+    @PostMapping("")
+    public ResponseEntity<TelefoneModel> update(@RequestBody TelefoneModel telefone) {
+        return ResponseEntity.status(HttpStatus.OK).body(telefoneService.update(telefone));
+    }
+
     @DeleteMapping("")
     public ResponseEntity<Void> delete(@RequestParam UUID id) {
         telefoneService.delete(id);

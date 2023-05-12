@@ -23,6 +23,11 @@ public class PreferenciaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(preferenciaService.save(preferencia));
     }
 
+    @PutMapping("")
+    public ResponseEntity<PreferenciaModel> update(@RequestBody PreferenciaModel preferencia) {
+        return ResponseEntity.status(HttpStatus.OK).body(preferenciaService.update(preferencia));
+    }
+
     @DeleteMapping("")
     public ResponseEntity<Void> delete(@RequestParam UUID id) {
         preferenciaService.delete(id);
