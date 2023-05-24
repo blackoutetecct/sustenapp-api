@@ -10,9 +10,9 @@ import sustenapp_api.component.client.TarifaClient;
 
 @OpenAPIDefinition(
         info = @Info(
-                title = "Gerenciamento de Votos - SPF",
+                title = "SustenAPP",
                 version = "1.0.0",
-                description = "Sistema de gerenciamento de votos em apresentacoes da Semana Paulo Freire.",
+                description = "",
                 // termsOfService = "",
 
                 contact = @Contact(
