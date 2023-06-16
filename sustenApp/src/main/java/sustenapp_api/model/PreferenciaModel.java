@@ -8,7 +8,6 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.sql.Date;
 import java.util.UUID;
 
 @Data
