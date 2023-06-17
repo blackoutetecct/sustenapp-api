@@ -32,16 +32,6 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .httpBasic(withDefaults())
-                .authorizeHttpRequests(
-                        authorize ->
-                                authorize
-                                        .requestMatchers(
-                                                ""
-                                        ).hasAnyRole("ADMIN", "PROFESSOR")
-                                        .requestMatchers("/professor/save").hasAnyRole("ADMIN")
-                                        .requestMatchers("/relatorio",  "/classificacao", "/sala", "/sala/**", "/auth", "/limites").permitAll()
-                                        .anyRequest().authenticated()
-                )
                 .headers().frameOptions().disable().and()
                 .cors().disable()
                 .csrf().disable()

@@ -68,7 +68,7 @@ public class EletricidadeService {
     }
 
     private EletricidadeModel setTime(EletricidadeModel eletricidade) {
-        eletricidade.setData(DateDependency.getTime());
+        eletricidade.setData(DateDependency.getDate());
         return eletricidade;
     }
 

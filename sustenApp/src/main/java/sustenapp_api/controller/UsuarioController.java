@@ -39,6 +39,12 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.findById(id));
     }
 
+    @PostMapping("/password")
+    public ResponseEntity<Void> forgotPassword(@RequestBody String email) {
+        usuarioService.forgotPassword(email);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<UsuarioModel>> listAll(@RequestParam(required = false) boolean full) {
         if(full)

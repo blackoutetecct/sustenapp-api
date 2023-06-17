@@ -12,7 +12,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
                 title = "SustenApp - API",
                 version = "1.0.0",
                 description = "",
-                // termsOfService = "",
 
                 contact = @Contact(
                         name = "Kaique Souza Santos",
@@ -28,7 +27,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class SustenAppApiApplication {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         SpringApplication.run(SustenAppApiApplication.class, args);
     }
 }

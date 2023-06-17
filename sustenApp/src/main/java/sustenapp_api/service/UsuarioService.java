@@ -3,6 +3,8 @@ package sustenapp_api.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import sustenapp_api.component.dependency.EmailDependency;
+import sustenapp_api.dto.EmailDto;
 import sustenapp_api.dto.UsuarioDto;
 import sustenapp_api.exception.ExceptionGeneric;
 import sustenapp_api.mapper.UsuarioMapper;
@@ -45,6 +47,13 @@ public class UsuarioService {
         );
     }
 
+    // funcionamento em desenvolvimento
+    public void forgotPassword(String email){
+        verifyExistsEmail(email);
+
+        EmailDependency.sendEmail(new EmailDto(email, "", ""));
+    }
+
     public List<UsuarioModel> listAll(){
         return usuarioRepository.findAll();
     }
@@ -79,6 +88,11 @@ public class UsuarioService {
             throw new ExceptionGeneric("", "", 404);
     }
 
+    private void verifyExistsEmail(String email){
+        if(!existsEmail(email))
+            throw new ExceptionGeneric("", "", 404);
+    }
+
     public boolean existsEmailAndSenha(String email, String senha){
         return usuarioRepository.existsByEmailAndSenha(email, senha);
     }
@@ -89,5 +103,9 @@ public class UsuarioService {
 
     private boolean existsEmailAndCPF(String email, String cpf){
         return usuarioRepository.existsByEmailAndCpf(email, cpf);
+    }
+
+    private boolean existsEmail(String email){
+        return usuarioRepository.existsByEmail(email);
     }
 }

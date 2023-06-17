@@ -37,7 +37,7 @@ public class TarifaService {
     }
 
     private TarifaModel setTime(TarifaModel tarifa) {
-        tarifa.setData(DateDependency.getTime());
+        tarifa.setData(DateDependency.getDate());
         return tarifa;
     }
 }

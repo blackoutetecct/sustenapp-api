@@ -68,7 +68,7 @@ public class DispositivoService {
     }
 
     private DispositivoModel setTime(DispositivoModel dispositivo) {
-        dispositivo.setData(DateDependency.getTime());
+        dispositivo.setData(DateDependency.getDate());
         return dispositivo;
     }
 

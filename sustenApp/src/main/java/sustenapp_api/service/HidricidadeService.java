@@ -68,7 +68,7 @@ public class HidricidadeService {
     }
 
     private HidricidadeModel setTime(HidricidadeModel hidricidade) {
-        hidricidade.setData(DateDependency.getTime());
+        hidricidade.setData(DateDependency.getDate());
         return hidricidade;
     }
 
