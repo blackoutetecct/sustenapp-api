@@ -13,9 +13,12 @@ import java.util.UUID;
 public interface EletricidadeRepository extends JpaRepository<EletricidadeModel, UUID> {
     Optional<List<EletricidadeModel>> findAllByUsuario(UUID usuario);
 
+    @Query(nativeQuery = true, value = "SELECT COUNT(eletricidade.id) FROM eletricidade WHERE renovavel = true")
+    long getQuantidadeEletricidadeRenovavel();
+
     @Query(nativeQuery = true, value = "SELECT SUM(consumo) FROM eletricidade WHERE renovavel = false")
-    double getVolumeEletricidade();
+    Optional<Double> getVolumeEletricidade();
 
     @Query(nativeQuery = true, value = "SELECT SUM(consumo) FROM eletricidade WHERE renovavel = true")
-    double getVolumeEletricidadeRenovavel();
+    Optional<Double> getVolumeEletricidadeRenovavel();
 }

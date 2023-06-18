@@ -13,9 +13,12 @@ import java.util.UUID;
 public interface HidricidadeRepository extends JpaRepository<HidricidadeModel, UUID> {
     Optional<List<HidricidadeModel>> findAllByUsuario(UUID usuario);
 
+    @Query(nativeQuery = true, value = "SELECT COUNT(hidricidade.id) FROM hidricidade WHERE renovavel = true")
+    long getQuantidadeHidricidadeRenovavel();
+
     @Query(nativeQuery = true, value = "SELECT SUM(consumo) FROM hidricidade WHERE renovavel = false")
-    double getVolumeHidricidade();
+    Optional<Double> getVolumeHidricidade();
 
     @Query(nativeQuery = true, value = "SELECT SUM(consumo) FROM hidricidade WHERE renovavel = true")
-    double getVolumeHidricidadeRenovavel();
+    Optional<Double> getVolumeHidricidadeRenovavel();
 }

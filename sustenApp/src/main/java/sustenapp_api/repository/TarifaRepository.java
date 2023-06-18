@@ -12,4 +12,7 @@ import java.util.UUID;
 public interface TarifaRepository extends JpaRepository<TarifaModel, UUID> {
     @Query(nativeQuery = true, value = "SELECT * FROM tarifa WHERE data = (SELECT MAX(data) FROM tarifa)")
     Optional<TarifaModel> getTopByData();
+
+    @Query(nativeQuery = true, value = "SELECT AVG(preco) FROM tarifa")
+    Optional<Double> getMediaTarifa();
 }
