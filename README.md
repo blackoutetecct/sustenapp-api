@@ -1,7 +1,7 @@
 <h1 align=center>SUSTENAPP-API</h1>
 
 <p align="center">
-  <img src="sustenapp_logo.png" width="500">
+  <img src="logo_sustenapp.png" width="500">
 </p>
 
 #
