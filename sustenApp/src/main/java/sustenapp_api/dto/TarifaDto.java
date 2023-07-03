@@ -2,7 +2,6 @@ package sustenapp_api.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import org.hibernate.validator.constraints.br.CPF;
 
 @Data
 public class TarifaDto {
