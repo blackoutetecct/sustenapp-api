@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.br.CPF;
+import sustenapp_api.component.constraint.annotation.CPFVerify;
 import sustenapp_api.component.constraint.annotation.StringVerify;
 
 @Data
@@ -20,6 +21,6 @@ public class UsuarioDto {
     @NotNull @Email
     private String email;
 
-    @NotNull @CPF
+    @NotNull @CPFVerify @CPF
     private String cpf;
 }

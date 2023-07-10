@@ -4,13 +4,12 @@ import sustenapp_api.dto.UsuarioDto;
 import sustenapp_api.model.persist.UsuarioModel;
 import sustenapp_api.model.type.PerfilTipo;
 
-import java.util.List;
 import java.util.UUID;
 
 public class UsuarioUtil {
     public static final String
             ID = "74d8f5a2-1d85-11ee-be56-0242ac120002", ID_FALSE = "1916a0ad-b90f-4446-84d3-a7c537b6b53d",
-            NOME = "TESTE", CPF = "51248547829",
+            NOME = "TESTE", CPF = "51122458088",
             EMAIL = "TESTE@teste.com", SENHA = "TESTE123", TIPO = "USUARIO";
 
     public static UsuarioModel factory() {

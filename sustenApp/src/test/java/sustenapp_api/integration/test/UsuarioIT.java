@@ -1,7 +1,6 @@
 package sustenapp_api.integration.test;
 
-import lombok.extern.log4j.Log4j;
-import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,7 @@ public class UsuarioIT {
     @Autowired private UsuarioService service;
     @Autowired private UsuarioRepository repository;
 
+    @BeforeEach
     private void setUp() {
         repository.deleteAll();
     }
@@ -32,8 +32,6 @@ public class UsuarioIT {
     @Test
     @DisplayName("Testes de Cobertura e Validacao do Metodo Save")
     public void save() {
-        setUp();
-
         var atual = service.save(factoryDto());
 
         assertAll(
@@ -42,6 +40,7 @@ public class UsuarioIT {
                 () -> assertEquals(factoryDto().getEmail(), atual.getEmail()),
                 () -> assertEquals(factoryDto().getSenha(), atual.getSenha()),
                 () -> assertEquals(factoryDto().getTipo(), atual.getTipo().toString()),
+
                 () -> assertThrows(
                         // @NotNull e @NotEmpty
                         Exception.class, () -> service.save(UsuarioDto.builder().build())
@@ -55,8 +54,8 @@ public class UsuarioIT {
                         Exception.class, () -> service.save(UsuarioUtil.factoryDto(NOME, CPF, SENHA, "TESTE", TIPO))
                 ),
                 () -> assertThrows(
-                        // @CPF
-                        Exception.class, () -> service.save(UsuarioUtil.factoryDto(NOME, "123456789", SENHA, EMAIL, TIPO)) // -> suspeito
+                        // @CPFVerify e @CPF -> suspeito
+                        Exception.class, () -> service.save(UsuarioUtil.factoryDto(NOME, "123456789", SENHA, EMAIL, TIPO))
                 ),
                 () -> assertThrows(
                         // PerfilTipo.getRecurso()
@@ -72,8 +71,6 @@ public class UsuarioIT {
     @Test
     @DisplayName("Testes de Cobertura e Validacao do Metodo Delete")
     public void delete() {
-        setUp();
-
         var atual = service.save(factoryDto());
 
         assertAll(
@@ -87,8 +84,6 @@ public class UsuarioIT {
     @Test
     @DisplayName("Testes de Cobertura e Validacao do Metodo Update")
     public void update() {
-        setUp();
-
         var atual = service.save(factoryDto());
 
         assertAll(
@@ -131,8 +126,6 @@ public class UsuarioIT {
     @Test
     @DisplayName("Testes de Cobertura e Validacao do Metodo FindById")
     public void findById() {
-        setUp();
-
         var atual = service.save(factoryDto());
 
         // adicionar save de endereco e telefone
@@ -148,8 +141,6 @@ public class UsuarioIT {
     @Test
     @DisplayName("Testes de Cobertura e Validacao do Metodo ListAll")
     public void listAll() {
-        setUp();
-
         var usuario_01 = service.save(factoryDto());
         var usuario_02 = service.save(UsuarioUtil.factoryDto(NOME, "90977833054", SENHA, "teste@email", TIPO));
 
