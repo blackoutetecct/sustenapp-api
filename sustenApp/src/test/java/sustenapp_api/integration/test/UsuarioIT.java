@@ -1,5 +1,7 @@
 package sustenapp_api.integration.test;
 
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,21 +43,27 @@ public class UsuarioIT {
                 () -> assertEquals(factoryDto().getSenha(), atual.getSenha()),
                 () -> assertEquals(factoryDto().getTipo(), atual.getTipo().toString()),
                 () -> assertThrows(
+                        // @NotNull e @NotEmpty
                         Exception.class, () -> service.save(UsuarioDto.builder().build())
                 ),
                 () -> assertThrows(
+                        // @StringVerify
                         Exception.class, () -> service.save(UsuarioUtil.factoryDto(NOME.concat("1"), CPF, SENHA, EMAIL, TIPO))
                 ),
                 () -> assertThrows(
+                        // @Email
                         Exception.class, () -> service.save(UsuarioUtil.factoryDto(NOME, CPF, SENHA, "TESTE", TIPO))
                 ),
                 () -> assertThrows(
+                        // @CPF
                         Exception.class, () -> service.save(UsuarioUtil.factoryDto(NOME, "123456789", SENHA, EMAIL, TIPO)) // -> suspeito
                 ),
                 () -> assertThrows(
+                        // PerfilTipo.getRecurso()
                         Exception.class, () -> service.save(UsuarioUtil.factoryDto(NOME, CPF, SENHA, EMAIL, "TESTE"))
                 ),
                 () -> assertThrows(
+                        // verifyExistsEmailOrCPF()
                         Exception.class, () -> service.save(factoryDto())
                 )
         );
@@ -92,6 +100,7 @@ public class UsuarioIT {
                 },
                 () -> assertThrows(
                         Exception.class, () -> {
+                            // verifyExistsUsuario()
                             var modificado = UsuarioUtil.factory();
                             modificado.setId(UUID.fromString(ID_FALSE));
 
@@ -100,6 +109,7 @@ public class UsuarioIT {
                 ),
                 () -> assertThrows(
                         Exception.class, () -> {
+                            // verifyExistsCPFAndTipo()
                             var modificado = UsuarioUtil.factory();
                             modificado.setCpf("51248547812");
 
@@ -108,6 +118,7 @@ public class UsuarioIT {
                 ),
                 () -> assertThrows(
                         Exception.class, () -> {
+                            // PerfilTipo.getRecurso()
                             var modificado = UsuarioUtil.factory();
                             modificado.setTipo(PerfilTipo.SUPORTE);
 
