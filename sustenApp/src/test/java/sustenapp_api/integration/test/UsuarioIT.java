@@ -38,7 +38,6 @@ public class UsuarioIT {
                 () -> assertEquals(factoryDto().getNome(), atual.getNome()),
                 () -> assertEquals(factoryDto().getCpf(), atual.getCpf()),
                 () -> assertEquals(factoryDto().getEmail(), atual.getEmail()),
-                () -> assertEquals(factoryDto().getSenha(), atual.getSenha()),
                 () -> assertEquals(factoryDto().getTipo(), atual.getTipo().toString()),
 
                 () -> assertThrows(

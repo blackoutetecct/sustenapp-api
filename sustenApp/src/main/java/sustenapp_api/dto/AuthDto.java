@@ -14,5 +14,5 @@ public class AuthDto {
     private String email;
 
     @NotNull @NotEmpty
-    private String senha, tipo;
+    private String senha;
 }

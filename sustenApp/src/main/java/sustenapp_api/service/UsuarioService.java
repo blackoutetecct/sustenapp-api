@@ -3,6 +3,7 @@ package sustenapp_api.service;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import sustenapp_api.dto.UsuarioDto;
 import sustenapp_api.exception.ExceptionGeneric;
@@ -26,6 +27,7 @@ public class UsuarioService {
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public UsuarioModel save(@Valid UsuarioDto usuario){
         verifyExistsEmailOrCPF(usuario.getEmail(), usuario.getCpf());
+        usuario.setSenha(new BCryptPasswordEncoder().encode(usuario.getSenha()));
 
         return usuarioRepository.save(new UsuarioMapper().toMapper(usuario));
     }
