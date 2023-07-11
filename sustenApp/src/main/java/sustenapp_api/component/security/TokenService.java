@@ -18,13 +18,11 @@ public class TokenService {
 
     public String generateToken(UsuarioModel usuario){
         try{
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-
             return JWT.create()
                     .withIssuer("auth-api")
                     .withSubject(usuario.getEmail())
                     .withExpiresAt(genExpirationDate())
-                    .sign(algorithm);
+                    .sign(Algorithm.HMAC256(secret));
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Error while generating token", exception);
         }
@@ -32,9 +30,7 @@ public class TokenService {
 
     public String validateToken(String token){
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-
-            return JWT.require(algorithm)
+            return JWT.require(Algorithm.HMAC256(secret))
                     .withIssuer("auth-api")
                     .build()
                     .verify(token)
