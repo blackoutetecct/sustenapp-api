@@ -9,7 +9,6 @@ import sustenapp_api.exception.ExceptionGeneric;
 import sustenapp_api.mapper.PreferenciaMapper;
 import sustenapp_api.model.persist.PreferenciaModel;
 import sustenapp_api.repository.PreferenciaRepository;
-import sustenapp_api.repository.UsuarioRepository;
 
 import java.util.List;
 import java.util.UUID;

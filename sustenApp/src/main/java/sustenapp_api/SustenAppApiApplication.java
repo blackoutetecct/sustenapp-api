@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @OpenAPIDefinition(
@@ -25,8 +26,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
                 )
         )
 )
-@EnableScheduling
 @SpringBootApplication
+@EnableRetry
+@EnableScheduling
 public class SustenAppApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(SustenAppApiApplication.class, args);

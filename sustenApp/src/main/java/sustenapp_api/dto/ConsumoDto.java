@@ -12,7 +12,7 @@ import java.util.UUID;
 @Builder
 public class ConsumoDto {
     @NotNull
-    private UUID modalidade;
+    private UUID recurso;
 
     @NotNull @NotEmpty @PositiveOrZero
     private Double consumo;

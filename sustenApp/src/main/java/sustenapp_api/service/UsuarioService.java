@@ -27,7 +27,7 @@ public class UsuarioService {
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public UsuarioModel save(@Valid UsuarioDto usuario){
         verifyExistsEmailOrCPF(usuario.getEmail(), usuario.getCpf());
-        usuario.setSenha(new BCryptPasswordEncoder().encode(usuario.getSenha()));
+        usuario.setSenha(encode(usuario.getSenha()));
 
         return usuarioRepository.save(new UsuarioMapper().toMapper(usuario));
     }
@@ -95,10 +95,6 @@ public class UsuarioService {
             throw new ExceptionGeneric("", "", 404);
     }
 
-    public boolean existsEmailAndSenhaAndTipo(String email, String senha, String tipo){
-        return usuarioRepository.existsByEmailAndSenhaAndTipo(email, senha, PerfilTipo.getRecurso(tipo));
-    }
-
     private boolean existsUsuario(UUID usuario){
         return usuarioRepository.existsById(usuario);
     }
@@ -109,5 +105,9 @@ public class UsuarioService {
 
     private boolean existsCPFAndTipo(String cpf, PerfilTipo tipo){
         return usuarioRepository.existsByCpfAndTipo(cpf, tipo);
+    }
+
+    private String encode(String senha) {
+        return new BCryptPasswordEncoder().encode(senha);
     }
 }

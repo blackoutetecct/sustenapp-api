@@ -1,40 +1,33 @@
 package sustenapp_api.component.dependency;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class DateDependency {
-    public static Calendar getCalendar() {
-        return Calendar.getInstance();
+    public static LocalDateTime getDate() {
+        return LocalDateTime.now();
     }
 
-    public static Date getDate() {
-        return getCalendar().getTime();
+    private static DateTimeFormatter formatter(String pattern) {
+        return DateTimeFormatter.ofPattern(pattern);
     }
 
-    public static String getDateFormated(Date data) {
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        return formatter.format(data);
+    public static String getDateFormatedMonthAndYear(LocalDateTime data) {
+        return formatter("MM/yyyy").format(data);
     }
 
-    public static String getDateFormatedMonthAndYear(Date data) {
-        DateFormat formatter = new SimpleDateFormat("MM/yyyy");
-        return formatter.format(data);
+    public static boolean checkDate(LocalDateTime data) {
+        return(
+                !isBefore(data, getDate()) &&
+                        isEqualMonthAndYear(data, getDate())
+        );
     }
 
-    public static Calendar parseDateToCalendar(Date data) {
-        Calendar calendar = getCalendar();
-        calendar.setTime(data);
-        return calendar;
+    public static boolean isBefore(LocalDateTime dateComparadora, LocalDateTime dateComparada) {
+        return dateComparadora.isBefore(dateComparada);
     }
 
-    public static boolean compareDate(Date dateComparadora, Date dateComparada) {
-        return dateComparadora.before(dateComparada);
-    }
-
-    public static boolean compareMonthAndYear(Date dateComparadora, Date dateComparada) {
+    public static boolean isEqualMonthAndYear(LocalDateTime dateComparadora, LocalDateTime dateComparada) {
         return getDateFormatedMonthAndYear(dateComparadora).equals(getDateFormatedMonthAndYear(dateComparada));
     }
 }

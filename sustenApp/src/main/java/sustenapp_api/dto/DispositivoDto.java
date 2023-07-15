@@ -5,7 +5,6 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Builder;
 import lombok.Data;
 import sustenapp_api.component.constraint.annotation.ComodoVerify;
-import sustenapp_api.component.constraint.annotation.TarifaVerify;
 import sustenapp_api.component.constraint.annotation.UsuarioVerify;
 
 import java.util.UUID;
@@ -22,12 +21,6 @@ public class DispositivoDto {
     @NotNull @UsuarioVerify
     private UUID usuario;
 
-    @NotNull @TarifaVerify
-    private UUID tarifa;
-
     @NotNull @ComodoVerify
     private UUID comodo;
-
-    @NotNull
-    private boolean renovavel;
 }

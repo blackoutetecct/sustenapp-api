@@ -10,6 +10,7 @@ import sustenapp_api.model.type.RecursoTipo;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -30,7 +31,7 @@ public class RecursoModel implements Serializable {
     private Double consumo;
     private UUID usuario;
     private boolean renovavel;
-    private Date data;
+    private LocalDateTime data;
     private UUID tarifa;
 
     @Enumerated(EnumType.STRING)

@@ -22,9 +22,9 @@ public class TarifaService {
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public TarifaModel save(@Valid TarifaDto tarifaDto){
-        var tarifa = setTime(new TarifaMapper().toMapper(tarifaDto));
-
+        var tarifa = new TarifaMapper().toMapper(tarifaDto);
         verifyDate(tarifa);
+
         return tarifaRepository.save(tarifa);
     }
 
@@ -33,7 +33,7 @@ public class TarifaService {
         tarifaRepository.deleteById(tarifa);
     }
 
-    @Scheduled(cron = "* 59 23 1 * *")
+    @Scheduled(cron = "* 01 00 1 * *")
     public void factory() {
         tarifaRepository.save(clone(findLast()));
     }
@@ -49,22 +49,16 @@ public class TarifaService {
     }
 
     public TarifaModel findLast() {
-        var tarifa = tarifaRepository.getTopByData().orElseThrow(
+        return tarifaRepository.getTopByData().orElseThrow(
                 () -> new ExceptionGeneric("", "", 404)
         );
-
-        verifyDate(tarifa);
-        return tarifaRepository.save(tarifa);
-    }
-
-    private TarifaModel setTime(TarifaModel tarifa) {
-        tarifa.setData(DateDependency.getDate());
-        return tarifa;
     }
 
     private TarifaModel clone(TarifaModel tarifa) {
         tarifa.setId(null);
-        return setTime(tarifa);
+        tarifa.setData(DateDependency.getDate());
+
+        return tarifa;
     }
 
     private void verifyDate(TarifaModel tarifa) {
@@ -73,9 +67,6 @@ public class TarifaService {
     }
 
     private boolean checkDate(TarifaModel tarifa) {
-        return(
-                !DateDependency.compareDate(tarifa.getData(), DateDependency.getDate()) &&
-                DateDependency.compareMonthAndYear(tarifa.getData(), DateDependency.getDate())
-        );
+        return DateDependency.checkDate(tarifa.getData());
     }
 }

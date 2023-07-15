@@ -9,7 +9,6 @@ import sustenapp_api.exception.ExceptionGeneric;
 import sustenapp_api.mapper.TelefoneMapper;
 import sustenapp_api.model.persist.TelefoneModel;
 import sustenapp_api.repository.TelefoneRepository;
-import sustenapp_api.repository.UsuarioRepository;
 
 import java.util.List;
 import java.util.UUID;

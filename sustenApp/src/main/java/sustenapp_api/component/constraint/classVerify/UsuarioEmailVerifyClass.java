@@ -2,12 +2,14 @@ package sustenapp_api.component.constraint.classVerify;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import sustenapp_api.component.constraint.annotation.UsuarioEmailVerify;
 import sustenapp_api.repository.UsuarioRepository;
 
+@RequiredArgsConstructor
 public class UsuarioEmailVerifyClass implements ConstraintValidator<UsuarioEmailVerify, String> {
-    @Autowired private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {

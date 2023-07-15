@@ -9,9 +9,9 @@ import sustenapp_api.dto.RecursoDto;
 import sustenapp_api.exception.ExceptionGeneric;
 import sustenapp_api.mapper.RecursoMapper;
 import sustenapp_api.model.persist.RecursoModel;
+import sustenapp_api.model.type.RecursoTipo;
 import sustenapp_api.repository.RecursoRepository;
 import sustenapp_api.repository.TarifaRepository;
-import sustenapp_api.repository.UsuarioRepository;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,12 +21,14 @@ import java.util.UUID;
 public class RecursoService {
     private final RecursoRepository recursoRepository;
     private final TarifaRepository tarifaRepository;
+    private final RecursoMapper recursoMapper;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
-    public RecursoModel save(@Valid RecursoDto recurso){
-        return recursoRepository.save(
-                setTime(new RecursoMapper().toMapper(recurso))
-        );
+    public RecursoModel save(@Valid RecursoDto recursoDto){
+        var recurso = recursoMapper.toMapper(recursoDto);
+        verifyUsuarioAndDate(recurso);
+
+        return recursoRepository.save(recurso);
     }
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
@@ -58,14 +60,27 @@ public class RecursoService {
         );
 
         recurso.setMediaConsumo(
-                recurso.getConsumo() / 30
+                recurso.getConsumo() / DateDependency.getDate().getDayOfMonth()
         );
 
         return recurso;
     }
 
-    private RecursoModel setTime(RecursoModel recurso) {
+    public RecursoModel findLast(UUID usuario, String tipo, boolean renovavel) {
+        var ultimoRecurso = recursoRepository.findLast(usuario, RecursoTipo.getRecurso(tipo), renovavel).orElseThrow(
+                () -> new ExceptionGeneric("", "", 400)
+        );
+
+        return (
+                DateDependency.isEqualMonthAndYear(ultimoRecurso.getData(), DateDependency.getDate()) ?
+                        ultimoRecurso : recursoRepository.save(clone(ultimoRecurso))
+        );
+    }
+
+    private RecursoModel clone(RecursoModel recurso) {
+        recurso.setId(null);
         recurso.setData(DateDependency.getDate());
+
         return recurso;
     }
 
@@ -74,7 +89,20 @@ public class RecursoService {
             throw new ExceptionGeneric("", "", 404);
     }
 
+    private void verifyUsuarioAndDate(RecursoModel recurso) {
+        if(!(checkDate(recurso)) || !(existsUsuario(recurso.getUsuario())))
+            throw new ExceptionGeneric("", "", 404);
+    }
+
+    private boolean existsUsuario(UUID usuario){
+        return recursoRepository.existsByUsuario(usuario);
+    }
+
     private boolean existsRecurso(UUID recurso){
         return recursoRepository.existsById(recurso);
+    }
+
+    private boolean checkDate(RecursoModel recurso) {
+        return DateDependency.checkDate(recurso.getData());
     }
 }

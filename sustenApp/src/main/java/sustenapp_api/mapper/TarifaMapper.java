@@ -1,5 +1,6 @@
 package sustenapp_api.mapper;
 
+import sustenapp_api.component.dependency.DateDependency;
 import sustenapp_api.dto.TarifaDto;
 import sustenapp_api.model.persist.TarifaModel;
 import sustenapp_api.model.type.RecursoTipo;
@@ -11,6 +12,7 @@ public class TarifaMapper {
                 .preco(objetoEntrada.getPreco())
                 .observacao(objetoEntrada.getObservacao())
                 .tipo(RecursoTipo.getRecurso(objetoEntrada.getTipo()))
+                .data(DateDependency.getDate())
                 .build();
     }
 }

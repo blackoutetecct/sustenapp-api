@@ -9,7 +9,6 @@ import sustenapp_api.exception.ExceptionGeneric;
 import sustenapp_api.mapper.EnderecoMapper;
 import sustenapp_api.model.persist.EnderecoModel;
 import sustenapp_api.repository.EnderecoRepository;
-import sustenapp_api.repository.UsuarioRepository;
 
 import java.util.List;
 import java.util.UUID;

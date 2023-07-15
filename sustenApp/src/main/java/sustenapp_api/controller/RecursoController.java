@@ -38,6 +38,11 @@ public class RecursoController {
         return ResponseEntity.status(HttpStatus.OK).body(recursoService.findById(id));
     }
 
+    @GetMapping("/last")
+    public ResponseEntity<RecursoModel> findLast(@RequestParam UUID usuario, @RequestParam String tipo, @RequestParam boolean renovavel) {
+        return ResponseEntity.status(HttpStatus.OK).body(recursoService.findLast(usuario, tipo, renovavel));
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<RecursoModel>> listAllByUsuario(@RequestParam UUID usuario) {
         return ResponseEntity.status(HttpStatus.OK).body(recursoService.listAllByUsuario(usuario));

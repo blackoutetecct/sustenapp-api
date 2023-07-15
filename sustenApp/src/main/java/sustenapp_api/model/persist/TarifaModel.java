@@ -10,6 +10,7 @@ import sustenapp_api.model.type.RecursoTipo;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -29,7 +30,7 @@ public class TarifaModel implements Serializable {
     private UUID id;
 
     private Double preco;
-    private Date data;
+    private LocalDateTime data;
 
     @Enumerated(EnumType.STRING)
     private RecursoTipo tipo;

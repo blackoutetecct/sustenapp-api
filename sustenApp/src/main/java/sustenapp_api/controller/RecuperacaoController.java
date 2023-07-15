@@ -17,7 +17,7 @@ public class RecuperacaoController {
 
     @PostMapping("")
     public ResponseEntity<RecuperacaoModel> save(@RequestParam String email) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(recuperacaoService.save(email));
+        return ResponseEntity.status(HttpStatus.OK).body(recuperacaoService.check(email));
     }
 
     @DeleteMapping("")

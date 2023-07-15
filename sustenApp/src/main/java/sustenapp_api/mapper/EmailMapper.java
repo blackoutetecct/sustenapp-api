@@ -4,13 +4,12 @@ import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import sustenapp_api.dto.EmailDto;
-import sustenapp_api.exception.ExceptionGeneric;
 
 public class EmailMapper {
     public MimeMessage toMapper(EmailDto objetoEntrada, JavaMailSender javaMailSender) {
         try {
             MimeMessage objetoSaida = javaMailSender.createMimeMessage();
-            MimeMessageHelper objetoAuxiliar = new MimeMessageHelper(objetoSaida, true);
+            MimeMessageHelper objetoAuxiliar = new MimeMessageHelper(objetoSaida, false);
 
             objetoAuxiliar.setTo(objetoEntrada.getDestinatario());
             objetoAuxiliar.setSubject(objetoEntrada.getAssunto());
@@ -18,7 +17,7 @@ public class EmailMapper {
 
             return objetoSaida;
         } catch (Exception ignored) {
-            throw new ExceptionGeneric("", "", 500);
+            return null;
         }
     }
 }

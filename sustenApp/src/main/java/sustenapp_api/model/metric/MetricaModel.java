@@ -6,9 +6,8 @@ import lombok.Data;
 @Data
 @Builder
 public class MetricaModel {
-    private long numeroResidencias, numeroDispositivos, numeroEletricoRenovavel, numeroHidricoRenovavel;
+    private long numeroResidencias, numeroDispositivos, numeroHidricoRenovavel;
     private Double
             volumeEletricoAdministrado, volumeHidricoAdministrado,
-            volumeEletricoRenovavel, volumeHidricoRenovavel,
-            valorEletricoEconomizado, valorHidricoEconomizado;
+            volumeHidricoRenovavel, valorHidricoEconomizado;
 }

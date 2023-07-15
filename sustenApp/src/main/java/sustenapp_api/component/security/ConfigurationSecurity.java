@@ -29,15 +29,15 @@ public class ConfigurationSecurity {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+        return http
                 .httpBasic(withDefaults())
                 .authorizeHttpRequests(
                         auth ->
                                 auth
-                                        .requestMatchers("/tarifa", "/metrica").hasAnyRole("ADMINSTRADOR")
-                                        .requestMatchers("/recurso", "/comodo", "/consumo", "/dispositivo", "/preferencia").hasAnyRole("USUARIO")
-                                        .requestMatchers("/endereco", "/endereco/**", "/telefone").hasAnyRole("ADMINISTRADOR", "SUPORTE", "USUARIO")
-                                        .requestMatchers("/auth", "/usuario", "/recuperacao", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                                        .requestMatchers("/tarifa**", "/metrica").hasAnyRole("ADMINSTRADOR")
+                                        .requestMatchers("/recurso**", "/comodo**", "/consumo**", "/dispositivo**", "/preferencia**").hasAnyRole("USUARIO")
+                                        .requestMatchers("/endereco**", "/telefone**").hasAnyRole("SUPORTE", "USUARIO")
+                                        .requestMatchers("/auth","/usuario**", "/recuperacao**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                         .anyRequest().authenticated()
                 )
                 .headers().frameOptions().disable().and()
@@ -45,9 +45,8 @@ public class ConfigurationSecurity {
                 .csrf().disable()
                 .formLogin().disable()
                 .addFilterBefore(filterSecurity, UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        return http.build();
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .build();
     }
 
     @Bean
