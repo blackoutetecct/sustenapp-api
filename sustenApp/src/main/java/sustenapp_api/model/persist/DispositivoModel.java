@@ -26,8 +26,7 @@ public class DispositivoModel implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private UUID usuario;
+    private UUID comodo;
     private String nome;
     private int porta;
-    private UUID comodo;
 }

@@ -5,7 +5,6 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Builder;
 import lombok.Data;
 import sustenapp_api.component.constraint.annotation.ComodoVerify;
-import sustenapp_api.component.constraint.annotation.UsuarioVerify;
 
 import java.util.UUID;
 
@@ -17,9 +16,6 @@ public class DispositivoDto {
 
     @NotNull @PositiveOrZero
     private int porta;
-
-    @NotNull @UsuarioVerify
-    private UUID usuario;
 
     @NotNull @ComodoVerify
     private UUID comodo;

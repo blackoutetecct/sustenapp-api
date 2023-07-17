@@ -42,11 +42,6 @@ public class DispositivoService {
         );
     }
 
-    public List<DispositivoModel> listAllByUsuario(UUID usuario) {
-        return dispositivoRepository.findAllByUsuario(usuario)
-                .orElseThrow(() -> new ExceptionGeneric("", "", 404));
-    }
-
     private void verifyExistsDispositivo(UUID dispositivo){
         if(!existsDispositivo(dispositivo))
             throw new ExceptionGeneric("", "", 404);

@@ -37,9 +37,4 @@ public class DispositivoController {
     public ResponseEntity<DispositivoModel> findById(@RequestParam UUID id) {
         return ResponseEntity.status(HttpStatus.OK).body(dispositivoService.findById(id));
     }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<DispositivoModel>> listAllByUsuario(@RequestParam UUID usuario) {
-        return ResponseEntity.status(HttpStatus.OK).body(dispositivoService.listAllByUsuario(usuario));
-    }
 }

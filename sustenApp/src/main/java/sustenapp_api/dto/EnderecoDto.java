@@ -12,7 +12,7 @@ import java.util.UUID;
 @Builder
 public class EnderecoDto {
     @NotNull @NotEmpty
-    private String logradouro, complemento, cep, ciade, estado;
+    private String logradouro, complemento, cep, cidade, estado;
 
     @NotNull @UsuarioVerify
     private UUID usuario;

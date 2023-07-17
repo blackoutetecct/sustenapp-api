@@ -12,7 +12,7 @@ import java.util.UUID;
 @Builder
 public class TelefoneDto {
     @NotNull @NotEmpty
-    private String telefone;
+    private String numero;
 
     @NotNull @UsuarioVerify
     private UUID usuario;
