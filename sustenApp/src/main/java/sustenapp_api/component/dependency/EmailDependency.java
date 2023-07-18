@@ -3,7 +3,7 @@ package sustenapp_api.component.dependency;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
-import sustenapp_api.dto.EmailDto;
+import sustenapp_api.dto.POST.EmailDto;
 import sustenapp_api.exception.ExceptionGeneric;
 import sustenapp_api.mapper.EmailMapper;
 

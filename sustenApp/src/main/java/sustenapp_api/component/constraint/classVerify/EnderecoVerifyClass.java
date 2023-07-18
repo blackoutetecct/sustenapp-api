@@ -7,7 +7,7 @@ import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.client.RestTemplate;
 import sustenapp_api.component.constraint.annotation.EnderecoVerify;
-import sustenapp_api.dto.EnderecoDto;
+import sustenapp_api.dto.POST.EnderecoDto;
 
 import java.util.stream.Stream;
 

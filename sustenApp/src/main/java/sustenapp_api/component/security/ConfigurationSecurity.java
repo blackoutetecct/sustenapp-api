@@ -37,7 +37,7 @@ public class ConfigurationSecurity {
                                         .requestMatchers("/tarifa**", "/metrica").hasAnyRole("ADMINSTRADOR")
                                         .requestMatchers("/recurso**", "/comodo**", "/consumo**", "/dispositivo**", "/preferencia**").hasAnyRole("USUARIO")
                                         .requestMatchers("/endereco**", "/telefone**").hasAnyRole("SUPORTE", "USUARIO")
-                                        .requestMatchers("/end","/auth","/usuario**", "/recuperacao**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                                        .requestMatchers("/auth","/usuario**", "/recuperacao**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                         .anyRequest().authenticated()
                 )
                 .headers().frameOptions().disable().and()
