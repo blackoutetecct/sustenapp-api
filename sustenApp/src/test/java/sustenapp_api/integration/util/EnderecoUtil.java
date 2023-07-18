@@ -1,6 +1,6 @@
 package sustenapp_api.integration.util;
 
-import sustenapp_api.dto.EnderecoDto;
+import sustenapp_api.dto.POST.EnderecoDto;
 import sustenapp_api.model.persist.EnderecoModel;
 
 import java.util.UUID;

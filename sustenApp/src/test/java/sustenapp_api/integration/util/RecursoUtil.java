@@ -1,6 +1,6 @@
 package sustenapp_api.integration.util;
 
-import sustenapp_api.dto.RecursoDto;
+import sustenapp_api.dto.POST.RecursoDto;
 import sustenapp_api.model.persist.RecursoModel;
 import sustenapp_api.model.type.RecursoTipo;
 

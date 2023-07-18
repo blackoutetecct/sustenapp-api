@@ -1,6 +1,7 @@
 package sustenapp_api.integration.util;
 
-import sustenapp_api.dto.UsuarioDto;
+import sustenapp_api.dto.POST.UsuarioDto;
+import sustenapp_api.dto.PUT.UsuarioPutDto;
 import sustenapp_api.model.persist.UsuarioModel;
 import sustenapp_api.model.type.PerfilTipo;
 
@@ -26,5 +27,9 @@ public class UsuarioUtil {
 
     public static UsuarioDto factoryDto(String nome, String cpf, String senha, String email, String tipo) {
         return UsuarioDto.builder().nome(nome).cpf(cpf).senha(senha).email(email).tipo(tipo).build();
+    }
+
+    public static UsuarioPutDto factoryPutDto(UUID id) {
+        return UsuarioPutDto.builder().id(id).nome("TESTADO").senha(SENHA).email(EMAIL).build();
     }
 }

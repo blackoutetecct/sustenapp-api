@@ -1,6 +1,6 @@
 package sustenapp_api.integration.util;
 
-import sustenapp_api.dto.TelefoneDto;
+import sustenapp_api.dto.POST.TelefoneDto;
 import sustenapp_api.model.persist.TelefoneModel;
 
 import java.util.UUID;

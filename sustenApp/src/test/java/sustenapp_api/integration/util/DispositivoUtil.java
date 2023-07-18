@@ -1,6 +1,6 @@
 package sustenapp_api.integration.util;
 
-import sustenapp_api.dto.DispositivoDto;
+import sustenapp_api.dto.POST.DispositivoDto;
 import sustenapp_api.model.persist.DispositivoModel;
 
 import java.util.UUID;

@@ -1,6 +1,6 @@
 package sustenapp_api.integration.util;
 
-import sustenapp_api.dto.ComodoDto;
+import sustenapp_api.dto.POST.ComodoDto;
 import sustenapp_api.model.persist.ComodoModel;
 
 import java.util.UUID;

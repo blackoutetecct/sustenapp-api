@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import sustenapp_api.dto.UsuarioDto;
+import sustenapp_api.dto.POST.UsuarioDto;
 import sustenapp_api.integration.util.UsuarioUtil;
 import sustenapp_api.model.type.PerfilTipo;
 import sustenapp_api.repository.UsuarioRepository;
@@ -84,39 +84,16 @@ public class UsuarioIT {
     @DisplayName("Testes de Cobertura e Validacao do Metodo Update")
     public void update() {
         var atual = service.save(factoryDto());
+        var modificado = service.update(factoryPutDto(atual.getId()));
 
         assertAll(
-                () -> {
-                    var modificado = atual;
-                    modificado.setNome("TESTADO");
+                () -> assertNotEquals(atual, modificado),
+                () -> assertNotEquals(atual.getNome(), modificado.getNome()),
+                () -> assertEquals(atual.getCpf(), modificado.getCpf()),
 
-                    assertEquals(atual, service.update(modificado));
-                },
                 () -> assertThrows(
                         Exception.class, () -> {
-                            // verifyExistsUsuario()
-                            var modificado = UsuarioUtil.factory();
-                            modificado.setId(UUID.fromString(ID_FALSE));
-
-                            service.update(modificado);
-                        }
-                ),
-                () -> assertThrows(
-                        Exception.class, () -> {
-                            // verifyExistsCPFAndTipo()
-                            var modificado = UsuarioUtil.factory();
-                            modificado.setCpf("51248547812");
-
-                            service.update(modificado);
-                        }
-                ),
-                () -> assertThrows(
-                        Exception.class, () -> {
-                            // PerfilTipo.getRecurso()
-                            var modificado = UsuarioUtil.factory();
-                            modificado.setTipo(PerfilTipo.SUPORTE);
-
-                            service.update(modificado);
+                            service.update(factoryPutDto(UUID.fromString(ID_FALSE)));
                         }
                 )
         );
