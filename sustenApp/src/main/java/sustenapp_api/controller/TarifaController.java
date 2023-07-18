@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sustenapp_api.dto.TarifaDto;
+import sustenapp_api.dto.POST.TarifaDto;
 import sustenapp_api.model.persist.TarifaModel;
 import sustenapp_api.service.TarifaService;
 
@@ -34,7 +34,7 @@ public class TarifaController {
     }
 
     @GetMapping("/last")
-    public ResponseEntity<TarifaModel> findLaste() {
+    public ResponseEntity<TarifaModel> findLast() {
         return ResponseEntity.status(HttpStatus.OK).body(tarifaService.findLast());
     }
 

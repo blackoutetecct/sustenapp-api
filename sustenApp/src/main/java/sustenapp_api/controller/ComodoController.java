@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sustenapp_api.dto.ComodoDto;
+import sustenapp_api.dto.POST.ComodoDto;
+import sustenapp_api.dto.PUT.ComodoPutDto;
 import sustenapp_api.model.persist.ComodoModel;
 import sustenapp_api.service.ComodoService;
 
@@ -23,7 +24,7 @@ public class ComodoController {
     }
 
     @PutMapping("")
-    public ResponseEntity<ComodoModel> update(@RequestBody ComodoModel comodo) {
+    public ResponseEntity<ComodoModel> update(@RequestBody ComodoPutDto comodo) {
         return ResponseEntity.status(HttpStatus.OK).body(comodoService.update(comodo));
     }
 

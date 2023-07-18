@@ -4,7 +4,8 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import sustenapp_api.dto.ComodoDto;
+import sustenapp_api.dto.POST.ComodoDto;
+import sustenapp_api.dto.PUT.ComodoPutDto;
 import sustenapp_api.exception.ExceptionGeneric;
 import sustenapp_api.mapper.ComodoMapper;
 import sustenapp_api.model.persist.ComodoModel;
@@ -28,10 +29,8 @@ public class ComodoService {
         comodoRepository.deleteById(comodo);
     }
 
-    public ComodoModel update(ComodoModel comodo){
-       verifyExistsComodo(comodo.getId());
-
-       return comodoRepository.save(comodo);
+    public ComodoModel update(@Valid ComodoPutDto comodo){
+       return comodoRepository.save(new ComodoMapper().toMapper(comodo, findById(comodo.getId())));
     }
 
     public ComodoModel findById(UUID comodo){
@@ -44,14 +43,5 @@ public class ComodoService {
         return comodoRepository.findAllByUsuario(usuario).orElseThrow(
                 () -> new ExceptionGeneric("", "", 404)
         );
-    }
-
-    private void verifyExistsComodo(UUID comodo){
-        if(existsComodo(comodo))
-            throw new ExceptionGeneric("", "", 404);
-    }
-
-    private boolean existsComodo(UUID comodo){
-        return comodoRepository.existsById(comodo);
     }
 }

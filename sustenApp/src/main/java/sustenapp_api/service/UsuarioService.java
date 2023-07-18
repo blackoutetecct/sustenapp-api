@@ -5,7 +5,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import sustenapp_api.dto.UsuarioDto;
+import sustenapp_api.dto.POST.UsuarioDto;
+import sustenapp_api.dto.PUT.UsuarioPutDto;
 import sustenapp_api.exception.ExceptionGeneric;
 import sustenapp_api.mapper.UsuarioMapper;
 import sustenapp_api.model.persist.UsuarioModel;
@@ -27,7 +28,6 @@ public class UsuarioService {
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public UsuarioModel save(@Valid UsuarioDto usuario){
         verifyExistsEmailOrCPF(usuario.getEmail(), usuario.getCpf());
-        usuario.setSenha(encode(usuario.getSenha()));
 
         return usuarioRepository.save(new UsuarioMapper().toMapper(usuario));
     }
@@ -37,11 +37,8 @@ public class UsuarioService {
         usuarioRepository.deleteById(usuario);
     }
 
-    public UsuarioModel update(UsuarioModel usuario){
-        verifyExistsUsuario(usuario.getId());
-        verifyExistsCPFAndTipo(usuario.getCpf(), usuario.getTipo());
-
-        return usuarioRepository.save(usuario);
+    public UsuarioModel update(@Valid UsuarioPutDto usuario){
+        return usuarioRepository.save(new UsuarioMapper().toMapper(usuario, findById(usuario.getId())));
     }
 
     public UsuarioModel findById(UUID usuario){
@@ -80,34 +77,12 @@ public class UsuarioService {
         return usuario;
     }
 
-    private void verifyExistsUsuario(UUID usuario){
-        if(!existsUsuario(usuario))
-            throw new ExceptionGeneric("", "", 404);
-    }
-
     private void verifyExistsEmailOrCPF(String email, String cpf){
         if(existsEmailOrCPF(email, cpf))
             throw new ExceptionGeneric("", "", 404);
     }
 
-    private void verifyExistsCPFAndTipo(String cpf, PerfilTipo tipo){
-        if(!existsCPFAndTipo(cpf, tipo))
-            throw new ExceptionGeneric("", "", 404);
-    }
-
-    private boolean existsUsuario(UUID usuario){
-        return usuarioRepository.existsById(usuario);
-    }
-
     private boolean existsEmailOrCPF(String email, String cpf){
         return usuarioRepository.existsByEmailOrCpf(email, cpf);
-    }
-
-    private boolean existsCPFAndTipo(String cpf, PerfilTipo tipo){
-        return usuarioRepository.existsByCpfAndTipo(cpf, tipo);
-    }
-
-    private String encode(String senha) {
-        return new BCryptPasswordEncoder().encode(senha);
     }
 }

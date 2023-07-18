@@ -4,15 +4,13 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import sustenapp_api.component.dependency.DateDependency;
-import sustenapp_api.dto.DispositivoDto;
+import sustenapp_api.dto.POST.DispositivoDto;
+import sustenapp_api.dto.PUT.DispositivoPutDto;
 import sustenapp_api.exception.ExceptionGeneric;
 import sustenapp_api.mapper.DispositivoMapper;
 import sustenapp_api.model.persist.DispositivoModel;
 import sustenapp_api.repository.DispositivoRepository;
-import sustenapp_api.repository.TarifaRepository;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -30,24 +28,13 @@ public class DispositivoService {
         dispositivoRepository.deleteById(dispositivo);
     }
 
-    public DispositivoModel update(DispositivoModel dispositivo){
-        verifyExistsDispositivo(dispositivo.getId());
-
-        return dispositivoRepository.save(dispositivo);
+    public DispositivoModel update(@Valid DispositivoPutDto dispositivo){
+        return dispositivoRepository.save(new DispositivoMapper().toMapper(dispositivo, findById(dispositivo.getId())));
     }
 
     public DispositivoModel findById(UUID dispositivo){
         return dispositivoRepository.findById(dispositivo).orElseThrow(
                 () -> new ExceptionGeneric("", "", 404)
         );
-    }
-
-    private void verifyExistsDispositivo(UUID dispositivo){
-        if(!existsDispositivo(dispositivo))
-            throw new ExceptionGeneric("", "", 404);
-    }
-
-    private boolean existsDispositivo(UUID dispositivo){
-        return dispositivoRepository.existsById(dispositivo);
     }
 }

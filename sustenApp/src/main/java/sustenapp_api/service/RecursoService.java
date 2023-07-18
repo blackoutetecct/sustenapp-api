@@ -5,7 +5,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sustenapp_api.component.dependency.DateDependency;
-import sustenapp_api.dto.RecursoDto;
+import sustenapp_api.dto.POST.RecursoDto;
+import sustenapp_api.dto.PUT.RecursoPutDto;
 import sustenapp_api.exception.ExceptionGeneric;
 import sustenapp_api.mapper.RecursoMapper;
 import sustenapp_api.model.persist.RecursoModel;
@@ -36,10 +37,8 @@ public class RecursoService {
         recursoRepository.deleteById(recurso);
     }
 
-    public RecursoModel update(RecursoModel recurso){
-        verifyExistsRecurso(recurso.getId());
-
-        return recursoRepository.save(recurso);
+    public RecursoModel update(@Valid RecursoPutDto recurso){
+        return recursoRepository.save(recursoMapper.toMapper(recurso, findById(recurso.getId())));
     }
 
     public RecursoModel findById(UUID recurso){
@@ -84,11 +83,6 @@ public class RecursoService {
         return recurso;
     }
 
-    private void verifyExistsRecurso(UUID recurso){
-        if(!existsRecurso(recurso))
-            throw new ExceptionGeneric("", "", 404);
-    }
-
     private void verifyUsuarioAndDate(RecursoModel recurso) {
         if(!(checkDate(recurso)) || !(existsUsuario(recurso.getUsuario())))
             throw new ExceptionGeneric("", "", 404);
@@ -96,10 +90,6 @@ public class RecursoService {
 
     private boolean existsUsuario(UUID usuario){
         return recursoRepository.existsByUsuario(usuario);
-    }
-
-    private boolean existsRecurso(UUID recurso){
-        return recursoRepository.existsById(recurso);
     }
 
     private boolean checkDate(RecursoModel recurso) {

@@ -1,9 +1,11 @@
 package sustenapp_api.mapper;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import sustenapp_api.component.dependency.DateDependency;
-import sustenapp_api.dto.RecursoDto;
+import sustenapp_api.dto.POST.RecursoDto;
+import sustenapp_api.dto.PUT.RecursoPutDto;
 import sustenapp_api.model.persist.RecursoModel;
 import sustenapp_api.model.type.RecursoTipo;
 import sustenapp_api.service.TarifaService;
@@ -23,5 +25,10 @@ public class RecursoMapper {
                 .data(DateDependency.getDate())
                 .tarifa(tarifaService.findLast().getId())
                 .build();
+    }
+
+    public RecursoModel toMapper(RecursoPutDto objetoEntrada, RecursoModel objetoSaida){
+        BeanUtils.copyProperties(objetoEntrada, objetoSaida);
+        return objetoSaida;
     }
 }

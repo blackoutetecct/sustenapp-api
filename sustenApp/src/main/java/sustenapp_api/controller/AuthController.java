@@ -8,7 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import sustenapp_api.component.security.TokenService;
-import sustenapp_api.dto.AuthDto;
+import sustenapp_api.dto.POST.AuthDto;
 import sustenapp_api.model.persist.UsuarioModel;
 
 @RestController

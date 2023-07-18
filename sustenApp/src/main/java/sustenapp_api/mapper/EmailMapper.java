@@ -3,7 +3,7 @@ package sustenapp_api.mapper;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import sustenapp_api.dto.EmailDto;
+import sustenapp_api.dto.POST.EmailDto;
 
 public class EmailMapper {
     public MimeMessage toMapper(EmailDto objetoEntrada, JavaMailSender javaMailSender) {

@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sustenapp_api.dto.EnderecoDto;
+import sustenapp_api.dto.POST.EnderecoDto;
+import sustenapp_api.dto.PUT.EnderecoPutDto;
 import sustenapp_api.model.persist.EnderecoModel;
 import sustenapp_api.service.EnderecoService;
 
@@ -23,7 +24,7 @@ public class EnderecoController {
     }
 
     @PutMapping("")
-    public ResponseEntity<EnderecoModel> update(@RequestBody EnderecoModel endereco) {
+    public ResponseEntity<EnderecoModel> update(@RequestBody EnderecoPutDto endereco) {
         return ResponseEntity.status(HttpStatus.OK).body(enderecoService.update(endereco));
     }
 

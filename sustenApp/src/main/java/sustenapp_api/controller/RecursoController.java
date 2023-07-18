@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sustenapp_api.dto.RecursoDto;
+import sustenapp_api.dto.POST.RecursoDto;
+import sustenapp_api.dto.PUT.RecursoPutDto;
 import sustenapp_api.model.persist.RecursoModel;
 import sustenapp_api.service.RecursoService;
 
@@ -23,7 +24,7 @@ public class RecursoController {
     }
 
     @PutMapping("")
-    public ResponseEntity<RecursoModel> update(@RequestBody RecursoModel recurso) {
+    public ResponseEntity<RecursoModel> update(@RequestBody RecursoPutDto recurso) {
         return ResponseEntity.status(HttpStatus.OK).body(recursoService.update(recurso));
     }
 

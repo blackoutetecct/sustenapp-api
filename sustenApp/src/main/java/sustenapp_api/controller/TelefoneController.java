@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sustenapp_api.dto.TelefoneDto;
+import sustenapp_api.dto.POST.TelefoneDto;
+import sustenapp_api.dto.PUT.TelefonePutDto;
 import sustenapp_api.model.persist.TelefoneModel;
 import sustenapp_api.service.TelefoneService;
 
@@ -23,7 +24,7 @@ public class TelefoneController {
     }
 
     @PutMapping("")
-    public ResponseEntity<TelefoneModel> update(@RequestBody TelefoneModel telefone) {
+    public ResponseEntity<TelefoneModel> update(@RequestBody TelefonePutDto telefone) {
         return ResponseEntity.status(HttpStatus.OK).body(telefoneService.update(telefone));
     }
 

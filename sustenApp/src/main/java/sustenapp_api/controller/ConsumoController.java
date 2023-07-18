@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sustenapp_api.dto.ConsumoDto;
+import sustenapp_api.dto.POST.ConsumoDto;
 import sustenapp_api.service.ConsumoService;
 
 @RestController

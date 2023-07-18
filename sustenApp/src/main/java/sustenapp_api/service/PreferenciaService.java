@@ -4,7 +4,8 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import sustenapp_api.dto.PreferenciaDto;
+import sustenapp_api.dto.POST.PreferenciaDto;
+import sustenapp_api.dto.PUT.PreferenciaPutDto;
 import sustenapp_api.exception.ExceptionGeneric;
 import sustenapp_api.mapper.PreferenciaMapper;
 import sustenapp_api.model.persist.PreferenciaModel;
@@ -28,10 +29,8 @@ public class PreferenciaService {
         preferenciaRepository.deleteById(preferencia);
     }
 
-    public PreferenciaModel update(PreferenciaModel preferencia){
-        verifyExistsPreferencia(preferencia.getId());
-
-        return preferenciaRepository.save(preferencia);
+    public PreferenciaModel update(@Valid PreferenciaPutDto preferencia){
+        return preferenciaRepository.save(new PreferenciaMapper().toMapper(preferencia, findById(preferencia.getId())));
     }
 
     public PreferenciaModel findById(UUID preferencia){
@@ -42,14 +41,5 @@ public class PreferenciaService {
 
     public List<PreferenciaModel> listAll(){
         return preferenciaRepository.findAll();
-    }
-
-    private void verifyExistsPreferencia(UUID preferencia){
-        if(!existsPreferencia(preferencia))
-            throw new ExceptionGeneric("", "", 404);
-    }
-
-    private boolean existsPreferencia(UUID preferencia){
-        return preferenciaRepository.existsById(preferencia);
     }
 }

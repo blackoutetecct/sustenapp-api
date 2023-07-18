@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sustenapp_api.dto.UsuarioDto;
+import sustenapp_api.dto.POST.UsuarioDto;
+import sustenapp_api.dto.PUT.UsuarioPutDto;
 import sustenapp_api.model.persist.UsuarioModel;
 import sustenapp_api.service.UsuarioService;
 
@@ -23,7 +24,7 @@ public class UsuarioController {
     }
 
     @PutMapping("")
-    public ResponseEntity<UsuarioModel> update(@RequestBody UsuarioModel usuario) {
+    public ResponseEntity<UsuarioModel> update(@RequestBody UsuarioPutDto usuario) {
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.update(usuario));
     }
 

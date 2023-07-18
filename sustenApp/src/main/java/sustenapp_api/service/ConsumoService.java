@@ -3,10 +3,8 @@ package sustenapp_api.service;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import sustenapp_api.dto.ConsumoDto;
-import sustenapp_api.model.persist.DispositivoModel;
+import sustenapp_api.dto.POST.ConsumoDto;
 import sustenapp_api.model.persist.RecursoModel;
-import sustenapp_api.repository.DispositivoRepository;
 import sustenapp_api.repository.RecursoRepository;
 
 import java.util.UUID;

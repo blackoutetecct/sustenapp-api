@@ -4,7 +4,8 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import sustenapp_api.dto.EnderecoDto;
+import sustenapp_api.dto.POST.EnderecoDto;
+import sustenapp_api.dto.PUT.EnderecoPutDto;
 import sustenapp_api.exception.ExceptionGeneric;
 import sustenapp_api.mapper.EnderecoMapper;
 import sustenapp_api.model.persist.EnderecoModel;
@@ -28,10 +29,8 @@ public class EnderecoService {
         enderecoRepository.deleteById(endereco);
     }
 
-    public EnderecoModel update(EnderecoModel endereco){
-        verifyExistsEndereco(endereco.getId());
-
-        return enderecoRepository.save(endereco);
+    public EnderecoModel update(@Valid EnderecoPutDto endereco){
+        return enderecoRepository.save(new EnderecoMapper().toMapper(endereco, findById(endereco.getId())));
     }
 
     public EnderecoModel findById(UUID endereco){
@@ -44,14 +43,5 @@ public class EnderecoService {
         return enderecoRepository.findAllByUsuario(usuario).orElseThrow(
                 () -> new ExceptionGeneric("", "", 404)
         );
-    }
-
-    private void verifyExistsEndereco(UUID endereco){
-        if(existsEndereco(endereco))
-            throw new ExceptionGeneric("", "", 404);
-    }
-
-    private boolean existsEndereco(UUID endereco){
-        return enderecoRepository.existsById(endereco);
     }
 }

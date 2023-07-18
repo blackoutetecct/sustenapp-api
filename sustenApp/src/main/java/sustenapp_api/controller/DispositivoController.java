@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sustenapp_api.dto.DispositivoDto;
+import sustenapp_api.dto.POST.DispositivoDto;
+import sustenapp_api.dto.PUT.DispositivoPutDto;
 import sustenapp_api.model.persist.DispositivoModel;
 import sustenapp_api.service.DispositivoService;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -23,7 +23,7 @@ public class DispositivoController {
     }
 
     @PutMapping("")
-    public ResponseEntity<DispositivoModel> update(@RequestBody DispositivoModel dispositivo) {
+    public ResponseEntity<DispositivoModel> update(@RequestBody DispositivoPutDto dispositivo) {
         return ResponseEntity.status(HttpStatus.OK).body(dispositivoService.update(dispositivo));
     }
 

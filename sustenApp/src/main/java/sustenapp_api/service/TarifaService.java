@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import sustenapp_api.component.dependency.DateDependency;
-import sustenapp_api.dto.TarifaDto;
+import sustenapp_api.dto.POST.TarifaDto;
 import sustenapp_api.exception.ExceptionGeneric;
 import sustenapp_api.mapper.TarifaMapper;
 import sustenapp_api.model.persist.TarifaModel;

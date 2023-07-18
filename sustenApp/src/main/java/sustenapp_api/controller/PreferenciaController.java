@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sustenapp_api.dto.PreferenciaDto;
+import sustenapp_api.dto.POST.PreferenciaDto;
+import sustenapp_api.dto.PUT.PreferenciaPutDto;
 import sustenapp_api.model.persist.PreferenciaModel;
 import sustenapp_api.service.PreferenciaService;
 
@@ -23,7 +24,7 @@ public class PreferenciaController {
     }
 
     @PutMapping("")
-    public ResponseEntity<PreferenciaModel> update(@RequestBody PreferenciaModel preferencia) {
+    public ResponseEntity<PreferenciaModel> update(@RequestBody PreferenciaPutDto preferencia) {
         return ResponseEntity.status(HttpStatus.OK).body(preferenciaService.update(preferencia));
     }
 
