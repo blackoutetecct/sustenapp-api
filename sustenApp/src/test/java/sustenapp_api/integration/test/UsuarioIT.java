@@ -8,7 +8,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import sustenapp_api.dto.POST.UsuarioDto;
 import sustenapp_api.integration.util.UsuarioUtil;
-import sustenapp_api.model.type.PerfilTipo;
 import sustenapp_api.repository.UsuarioRepository;
 import sustenapp_api.service.UsuarioService;
 

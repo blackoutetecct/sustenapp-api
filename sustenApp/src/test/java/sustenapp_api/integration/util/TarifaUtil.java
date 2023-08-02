@@ -1,6 +1,7 @@
 package sustenapp_api.integration.util;
 
 import sustenapp_api.dto.POST.TarifaDto;
+
 import sustenapp_api.model.persist.TarifaModel;
 import sustenapp_api.model.type.RecursoTipo;
 
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class TarifaUtil {
-    public static String ID = "", TIPO = "", OBSERVACAO = "";
+    public static String ID = "74d8f5a2-1d85-11ee-be56-0242ac120002", TIPO = "ELETRICO", OBSERVACAO = "test";
     public static Double PRECO = 1.2;
 
     public static TarifaModel factory(LocalDateTime data) {
@@ -41,6 +42,7 @@ public class TarifaUtil {
                 .observacao(OBSERVACAO)
                 .build();
     }
+
 
     public static TarifaDto factoryDto(Double preco, String tipo, String observacao) {
         return TarifaDto

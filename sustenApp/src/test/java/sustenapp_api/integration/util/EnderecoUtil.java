@@ -1,15 +1,16 @@
 package sustenapp_api.integration.util;
 
 import sustenapp_api.dto.POST.EnderecoDto;
+import sustenapp_api.dto.PUT.EnderecoPutDto;
 import sustenapp_api.model.persist.EnderecoModel;
 
 import java.util.UUID;
 
 public class EnderecoUtil {
     public static String
-        ID = "", USUARIO = "",
-        LOGRADOURO = "", COMPLEMENTO = "", CEP = "",
-        CIDADE = "", ESTADO = "";
+        ID = "74d8f5a2-1d85-11ee-be56-0242ac120002", USUARIO = "84d8f5a2-1d85-11ee-be56-0242ac120002",
+        LOGRADOURO = "Rua Igarape Agua Azul", COMPLEMENTO = "", CEP = "08485-310",
+        CIDADE = "Sao Paulo", ESTADO = "SP";
 
     public static EnderecoModel factory() {
         return EnderecoModel
@@ -47,6 +48,10 @@ public class EnderecoUtil {
                 .cidade(CIDADE)
                 .estado(ESTADO)
                 .build();
+    }
+
+    public static EnderecoPutDto factoryPutDto(UUID id) {
+        return EnderecoPutDto.builder().id(id).estado("Teste").logradouro(LOGRADOURO).complemento(COMPLEMENTO).cep(CEP).cidade(CIDADE).build();
     }
 
     public static EnderecoDto factoryDto(UUID usuario, String logradouro, String complemento, String cep, String cidade, String estado) {
