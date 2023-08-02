@@ -23,7 +23,7 @@ public class ComodoUtil {
     }
 
     public static ComodoPutDto factoryPutDto(UUID usuario) {
-        return ComodoPutDto.builder().id(UUID.fromString(String.valueOf(usuario))).nome("Teste").build();
+        return ComodoPutDto.builder().id(usuario).nome("Teste").build();
     }
 
     public static ComodoDto factoryDto(UUID usuario, String nome) {
