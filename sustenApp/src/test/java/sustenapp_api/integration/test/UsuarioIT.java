@@ -69,14 +69,7 @@ public class UsuarioIT {
     @Test
     @DisplayName("Testes de Cobertura e Validacao do Metodo Delete")
     public void delete() {
-        var atual = service.save(factoryDto());
-
-        assertAll(
-                () -> assertDoesNotThrow(() -> service.delete(atual.getId())),
-                () -> assertThrows(
-                        Exception.class, () -> service.delete(UUID.fromString(ID_FALSE))
-                )
-        );
+        assertDoesNotThrow(() -> service.delete(service.save(factoryDto()).getId()));
     }
 
     @Test

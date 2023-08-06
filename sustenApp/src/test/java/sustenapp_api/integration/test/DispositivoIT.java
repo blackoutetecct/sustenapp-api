@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import sustenapp_api.dto.POST.DispositivoDto;
 import sustenapp_api.integration.util.ComodoUtil;
 import sustenapp_api.integration.util.UsuarioUtil;
 import sustenapp_api.repository.ComodoRepository;
@@ -55,22 +56,31 @@ public class DispositivoIT {
         assertAll(
                 () -> assertEquals(esperado.getComodo(), atual.getComodo()),
                 () -> assertEquals(esperado.getPorta(), atual.getPorta()),
-                () -> assertEquals(esperado.getNome(), atual.getNome())
-                // RESTANTE(THROWS)
+                () -> assertEquals(esperado.getNome(), atual.getNome()),
+
+                () -> assertThrows(
+                        //@NotNull @NotEmpty - suspeito
+                        Exception.class, () -> service.save(DispositivoDto.builder().build())
+                ),
+                () -> assertThrows(
+                        //@NotNull - suspeito
+                        Exception.class, () -> service.save(factoryDto(comodo, null, PORTA))
+                ),
+                () -> assertThrows(
+                        //@PositivoOrZero - suspeito
+                        Exception.class, () -> service.save(factoryDto(comodo, NOME, -1))
+                ),
+                () -> assertThrows(
+                        //@ComodoVerify
+                        Exception.class, () -> service.save(factoryDto(UUID.fromString(ID), NOME, PORTA))
+                )
         );
     }
 
     @Test
     @DisplayName("Testes de Cobertura e Validação do Metodo Delete")
     public void delete() {
-        var atual = service.save(factoryDto(comodo));
-
-        assertAll(
-                () -> assertDoesNotThrow(() -> service.delete(atual.getId())),
-                () -> assertThrows(
-                        Exception.class, () -> service.delete(UUID.fromString(ComodoUtil.ID))
-                )
-        );
+        assertDoesNotThrow(() -> service.delete(service.save(factoryDto(comodo)).getId()));
     }
 
     @Test

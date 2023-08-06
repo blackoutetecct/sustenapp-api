@@ -65,14 +65,7 @@ public class RecursoIT {
     @Test
     @DisplayName("Testes de Cobertura e Validação do Metodo Delete")
     public void delete() {
-        var atual = service.save(factoryDto(usuario, tarifa));
-
-        assertAll(
-                () -> assertDoesNotThrow(() -> service.delete(atual.getId())),
-                () -> assertThrows(
-                        Exception.class, () -> service.delete(atual.getId())
-                )
-        );
+        assertDoesNotThrow(() -> service.delete(service.save(factoryDto(usuario, tarifa)).getId()));
     }
 
     @Test

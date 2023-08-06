@@ -38,10 +38,10 @@ public class EnderecoUtil {
                 .build();
     }
 
-    public static EnderecoDto factoryDto() {
+    public static EnderecoDto factoryDto(UUID usuario) {
         return EnderecoDto
                 .builder()
-                .usuario(UUID.fromString(USUARIO))
+                .usuario(usuario)
                 .logradouro(LOGRADOURO)
                 .complemento(COMPLEMENTO)
                 .cep(CEP)

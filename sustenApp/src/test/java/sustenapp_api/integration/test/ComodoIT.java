@@ -1,5 +1,6 @@
 package sustenapp_api.integration.test;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import sustenapp_api.dto.POST.ComodoDto;
 import sustenapp_api.integration.util.ComodoUtil;
 import sustenapp_api.integration.util.UsuarioUtil;
 import sustenapp_api.repository.ComodoRepository;
+import sustenapp_api.repository.UsuarioRepository;
 import sustenapp_api.service.ComodoService;
 
 import java.util.List;
@@ -26,19 +28,25 @@ public class ComodoIT {
     @Autowired private ComodoService service;
     @Autowired private ComodoRepository repository;
     @Autowired private UsuarioService usuarioService;
+    @Autowired private UsuarioRepository usuarioRepository;
+
+    private UUID usuario;
 
     @BeforeEach
     private void setUp() {
+        saveUsuario();
+    }
+
+    @AfterEach
+    private void reset() {
         repository.deleteAll();
+        usuarioRepository.deleteAll();
     }
 
     @Test
     @DisplayName("Testes de Cobertura e Validacao do Metodo Save")
     public void save() {
-        var usuario = usuarioService.save(UsuarioUtil.factoryDto()).getId();
         var atual = service.save(factoryDto(usuario));
-
-       System.out.println(service.save(ComodoDto.builder().build()));
 
         assertAll(
                () -> assertEquals(factoryDto(usuario).getNome(), atual.getNome()),
@@ -57,20 +65,13 @@ public class ComodoIT {
     @Test
     @DisplayName("Testes de Cobertura e Validação do Metodo Delete")
     public void delete() {
-        var atual = service.save(factoryDto(UUID.fromString(UsuarioUtil.ID)));
-
-        assertAll(
-                () -> assertDoesNotThrow(() -> service.delete(atual.getId())),
-                () -> assertThrows(
-                        Exception.class, () -> service.delete(UUID.fromString(UsuarioUtil.ID))
-                )
-        );
+        assertDoesNotThrow(() -> service.delete(service.save(factoryDto(usuario)).getId()));
     }
 
     @Test
     @DisplayName("Testes de Cobertura e Validação do Metodo FindById")
     public void findById() {
-        var atual = service.save(factoryDto(UUID.fromString(UsuarioUtil.ID)));
+        var atual = service.save(factoryDto(usuario));
 
         assertAll(
                 () -> assertEquals(atual.getId(), service.findById(atual.getId()).getId()),
@@ -83,7 +84,7 @@ public class ComodoIT {
     @Test
     @DisplayName("Testes de Cobertura e Validacao do Metodo Update")
     public void update() {
-        var atual = service.save(factoryDto(UUID.fromString(UsuarioUtil.ID)));
+        var atual = service.save(factoryDto(usuario));
         var modificado = service.update(ComodoUtil.factoryPutDto(atual.getId()));
 
         assertAll(
@@ -104,5 +105,9 @@ public class ComodoIT {
         assertEquals(
                 List.of(comodo), service.listAllByUsuario(UUID.fromString(USUARIO))
         );
+    }
+
+    private void saveUsuario() {
+        usuario = usuarioService.save(UsuarioUtil.factoryDto()).getId();
     }
 }

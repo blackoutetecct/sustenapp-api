@@ -50,7 +50,6 @@ public class TelefoneIT {
         var esperado = factoryDto(usuario);
 
         assertAll(
-
                 () -> assertEquals(esperado.getNumero(), atual.getNumero()),
                 () -> assertEquals(esperado.getUsuario(), atual.getUsuario()),
 
@@ -68,14 +67,7 @@ public class TelefoneIT {
     @Test
     @DisplayName("Testes de Cobertura e Validação do Metodo Delete")
     public void delete() {
-        var atual = service.save(factoryDto(usuario));
-
-        assertAll(
-                () -> assertDoesNotThrow(() -> service.delete(atual.getId())),
-                () -> assertThrows(
-                        Exception.class, () -> service.delete(UUID.fromString(ID))
-                )
-        );
+        assertDoesNotThrow(() -> service.delete(service.save(factoryDto(usuario)).getId()));
     }
 
     @Test

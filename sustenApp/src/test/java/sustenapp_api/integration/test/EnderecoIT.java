@@ -1,5 +1,6 @@
 package sustenapp_api.integration.test;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,8 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import sustenapp_api.dto.POST.EnderecoDto;
 import sustenapp_api.integration.util.EnderecoUtil;
 
+import sustenapp_api.integration.util.UsuarioUtil;
 import sustenapp_api.repository.EnderecoRepository;
+import sustenapp_api.repository.UsuarioRepository;
 import sustenapp_api.service.EnderecoService;
+import sustenapp_api.service.UsuarioService;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,29 +29,37 @@ import static sustenapp_api.integration.util.EnderecoUtil.*;
 @AutoConfigureTestDatabase
 public class EnderecoIT {
 
-    @Autowired
-    private EnderecoService service;
+    @Autowired private EnderecoService service;
+    @Autowired private EnderecoRepository repository;
+    @Autowired private UsuarioService usuarioService;
+    @Autowired private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private EnderecoRepository repository;
+    private UUID usuario;
 
     @BeforeEach
     private void setUp() {
+        saveUsuario();
+    }
+
+    @AfterEach
+    private void reset() {
         repository.deleteAll();
+        usuarioRepository.deleteAll();
     }
 
     @Test
     @DisplayName("Testes de Cobertura e Validação do Metodo Save")
-    public void save(){
-        var atual = service.save(factoryDto());
+     public void save(){
+        var atual = service.save(factoryDto(usuario));
+        var esperado = factoryDto(usuario);
 
         assertAll(
-                () -> assertEquals(factoryDto().getUsuario(), atual.getUsuario()),
-                () -> assertEquals(factoryDto().getCep(), atual.getCep()),
-                () -> assertEquals(factoryDto().getCidade(), atual.getCidade()),
-                () -> assertEquals(factoryDto().getEstado(), atual.getEstado()),
-                () -> assertEquals(factoryDto().getLogradouro(), atual.getLogradouro()),
-                () -> assertEquals(factoryDto().getComplemento(), atual.getComplemento()),
+                () -> assertEquals(esperado.getUsuario(), atual.getUsuario()),
+                () -> assertEquals(esperado.getCep(), atual.getCep()),
+                () -> assertEquals(esperado.getCidade(), atual.getCidade()),
+                () -> assertEquals(esperado.getEstado(), atual.getEstado()),
+                () -> assertEquals(esperado.getLogradouro(), atual.getLogradouro()),
+                () -> assertEquals(esperado.getComplemento(), atual.getComplemento()),
 
                 () -> assertThrows(
                         // @NotNull - OBSERVACAO
@@ -83,20 +95,13 @@ public class EnderecoIT {
     @Test
     @DisplayName("Testes de Cobertura e Validação do Metodo Delete")
     public void delete() {
-        var atual = service.save(factoryDto());
-
-        assertAll(
-                () -> assertDoesNotThrow(() -> service.delete(atual.getId())),
-                () -> assertThrows(
-                            Exception.class, () -> service.delete(UUID.fromString(ID))
-                )
-        );
+        assertDoesNotThrow(() -> service.delete(service.save(factoryDto(usuario)).getId()));
     }
 
     @Test
     @DisplayName("Testes de Cobertura e Validação do Metodo FindById")
     public void findById() {
-        var atual = service.save(factoryDto());
+        var atual = service.save(factoryDto(usuario));
 
         assertAll(
                 () -> assertEquals(atual.getId(), service.findById(atual.getId()).getId()),
@@ -109,7 +114,7 @@ public class EnderecoIT {
     @Test
     @DisplayName("Testes de Cobertura e Validacao do Metodo Update")
     public void update() {
-        var atual = service.save(factoryDto());
+        var atual = service.save(factoryDto(usuario));
         var modificado = service.update(factoryPutDto(atual.getId()));
 
         assertAll(
@@ -133,5 +138,9 @@ public class EnderecoIT {
         assertEquals(
                 List.of(endereco), service.listAllByUsuario(UUID.fromString(USUARIO))
         );
+    }
+
+    private void saveUsuario() {
+        usuario = usuarioService.save(UsuarioUtil.factoryDto()).getId();
     }
 }

@@ -8,8 +8,8 @@ import sustenapp_api.model.persist.DispositivoModel;
 import java.util.UUID;
 
 public class DispositivoUtil {
-    public static String ID, NOME;
-    public static int PORTA;
+    public static String ID, NOME = "LAMPADA";
+    public static int PORTA = 4;
 
     public static DispositivoModel factory(UUID comodo) {
         return DispositivoModel

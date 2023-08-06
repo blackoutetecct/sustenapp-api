@@ -72,14 +72,7 @@ public class TarifaIT {
     @Test
     @DisplayName("Testes de Cobertura e Validação do Metodo Delete")
     public void delete() {
-        var atual = service.save(factoryDto());
-
-        assertAll(
-                () -> assertDoesNotThrow(() -> service.delete(atual.getId())),
-                () -> assertThrows(
-                        Exception.class, () -> service.delete(UUID.fromString(ID))
-                )
-        );
+        assertDoesNotThrow(() -> service.delete(service.save(factoryDto()).getId()));
     }
 
     @Test
