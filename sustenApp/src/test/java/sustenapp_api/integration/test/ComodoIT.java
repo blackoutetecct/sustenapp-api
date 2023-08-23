@@ -24,7 +24,6 @@ import sustenapp_api.service.UsuarioService;
 @SpringBootTest
 @AutoConfigureTestDatabase
 public class ComodoIT {
-
     @Autowired private ComodoService service;
     @Autowired private ComodoRepository repository;
     @Autowired private UsuarioService usuarioService;
@@ -52,12 +51,10 @@ public class ComodoIT {
                () -> assertEquals(factoryDto(usuario).getNome(), atual.getNome()),
                () -> assertEquals(factoryDto(usuario).getUsuario(), atual.getUsuario()),
                () -> assertThrows(
-                       // @NotNull e @NotEmpty - OBSERVACAO
                        Exception.class, () -> service.save(ComodoDto.builder().build())
                ),
                () -> assertThrows(
-                       // @UserVerify - OBSERVACAO
-                       Exception.class, () -> service.save(ComodoUtil.factoryDto(UUID.fromString(USUARIO),ComodoUtil.NOME))
+                       Exception.class, () -> service.save(ComodoUtil.factoryDto(UUID.fromString(USUARIO), ComodoUtil.NOME))
                )
        );
     }

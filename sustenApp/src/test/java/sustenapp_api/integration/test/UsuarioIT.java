@@ -48,11 +48,11 @@ public class UsuarioIT {
                         Exception.class, () -> service.save(UsuarioUtil.factoryDto(NOME.concat("1"), CPF, SENHA, EMAIL, TIPO))
                 ),
                 () -> assertThrows(
-                        // @Email
+                        // @EmailValidation
                         Exception.class, () -> service.save(UsuarioUtil.factoryDto(NOME, CPF, SENHA, "TESTE", TIPO))
                 ),
                 () -> assertThrows(
-                        // @CPFVerify e @CPF -> suspeito
+                        // @CPFVerify e @CPFValidation -> suspeito
                         Exception.class, () -> service.save(UsuarioUtil.factoryDto(NOME, "123456789", SENHA, EMAIL, TIPO))
                 ),
                 () -> assertThrows(
