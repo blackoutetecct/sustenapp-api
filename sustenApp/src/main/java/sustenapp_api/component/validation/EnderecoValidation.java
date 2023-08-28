@@ -3,6 +3,7 @@ package sustenapp_api.component.validation;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import sustenapp_api.dto.POST.EnderecoDto;
 
@@ -10,6 +11,7 @@ import java.util.stream.Stream;
 
 import static sustenapp_api.component.treatment.StringTreatment.removeEspeciais;
 
+@Component
 @RequiredArgsConstructor
 public class EnderecoValidation {
     private final RestTemplate cliente;

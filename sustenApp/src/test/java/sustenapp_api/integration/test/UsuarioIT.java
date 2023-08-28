@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import sustenapp_api.component.validation.UsuarioValidation;
 import sustenapp_api.dto.POST.UsuarioDto;
 import sustenapp_api.integration.util.UsuarioUtil;
 import sustenapp_api.repository.UsuarioRepository;

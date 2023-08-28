@@ -3,8 +3,13 @@ package sustenapp_api.service;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import sustenapp_api.component.rule.Validation;
+import sustenapp_api.component.validation.CPFValidation;
+import sustenapp_api.component.validation.EmailValidation;
+import sustenapp_api.component.validation.NotEmpty;
+import sustenapp_api.component.validation.NotNull;
+import sustenapp_api.dto.POST.ComodoDto;
 import sustenapp_api.dto.POST.UsuarioDto;
 import sustenapp_api.dto.PUT.UsuarioPutDto;
 import sustenapp_api.exception.ExceptionGeneric;
@@ -17,18 +22,19 @@ import sustenapp_api.repository.UsuarioRepository;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class UsuarioService {
+public class UsuarioService implements Validation<UsuarioDto> {
     private final UsuarioRepository usuarioRepository;
     private final EnderecoRepository enderecoRepository;
     private final TelefoneRepository telefoneRepository;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public UsuarioModel save(@Valid UsuarioDto usuario){
+        validated(usuario);
         verifyExistsEmailOrCPF(usuario.getEmail(), usuario.getCpf());
-
         return usuarioRepository.save(new UsuarioMapper().toMapper(usuario));
     }
 
@@ -84,5 +90,27 @@ public class UsuarioService {
 
     private boolean existsEmailOrCPF(String email, String cpf){
         return usuarioRepository.existsByEmailOrCpf(email, cpf);
+    }
+
+    @Override
+    public boolean validate(UsuarioDto value) {
+        return Stream.of(
+                NotNull.isValid(value.getNome()),
+                NotEmpty.isValid(value.getNome()),
+                NotNull.isValid(value.getSenha()),
+                NotEmpty.isValid(value.getSenha()),
+                NotNull.isValid(value.getTipo()),
+                NotEmpty.isValid(value.getTipo()),
+                NotNull.isValid(value.getEmail()),
+                EmailValidation.isValid(value.getEmail()),
+                NotNull.isValid(value.getCpf()),
+                CPFValidation.isValid(value.getCpf())
+        ).allMatch(valor -> valor.equals(true));
+    }
+
+    @Override
+    public void validated(UsuarioDto value) {
+        if(!validate(value))
+            new ExceptionGeneric("", "", 404);
     }
 }

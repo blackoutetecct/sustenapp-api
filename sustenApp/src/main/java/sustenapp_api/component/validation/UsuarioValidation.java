@@ -1,14 +1,15 @@
 package sustenapp_api.component.validation;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import sustenapp_api.repository.UsuarioRepository;
 
 import java.util.UUID;
 
 @Component
+@RequiredArgsConstructor
 public class UsuarioValidation {
-    @Autowired private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public boolean isValid(UUID value) {
         return existsUsuario(value);

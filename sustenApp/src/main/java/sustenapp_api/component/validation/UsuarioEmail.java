@@ -7,11 +7,11 @@ import sustenapp_api.repository.UsuarioRepository;
 public class UsuarioEmail {
     private final UsuarioRepository usuarioRepository;
 
-    public boolean isValid(java.lang.String value) {
+    public boolean isValid(String value) {
         return existsUsuarioByEmail(value);
     }
 
-    private boolean existsUsuarioByEmail(java.lang.String email){
+    private boolean existsUsuarioByEmail(String email){
         return usuarioRepository.existsByEmail(email);
     }
 }

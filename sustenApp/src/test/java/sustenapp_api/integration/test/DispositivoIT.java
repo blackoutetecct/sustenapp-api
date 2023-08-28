@@ -59,19 +59,19 @@ public class DispositivoIT {
                 () -> assertEquals(esperado.getNome(), atual.getNome()),
 
                 () -> assertThrows(
-                        //@NotNull @NotEmpty - suspeito
+                        // NotNull NotEmpty
                         Exception.class, () -> service.save(DispositivoDto.builder().build())
                 ),
                 () -> assertThrows(
-                        //@NotNull - suspeito
+                        // NotNull
                         Exception.class, () -> service.save(factoryDto(comodo, null, PORTA))
                 ),
                 () -> assertThrows(
-                        //@PositivoOrZero - suspeito
-                        Exception.class, () -> service.save(factoryDto(comodo, NOME, -1))
+                        // PositivoOrZero
+                        Exception.class, () -> service.save(factoryDto(comodo, NOME, 0))
                 ),
                 () -> assertThrows(
-                        //@ComodoVerify
+                        // ComodoVerify
                         Exception.class, () -> service.save(factoryDto(UUID.fromString(ID), NOME, PORTA))
                 )
         );

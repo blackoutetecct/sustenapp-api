@@ -1,10 +1,12 @@
 package sustenapp_api.component.validation;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import sustenapp_api.repository.ComodoRepository;
 
 import java.util.UUID;
 
+@Component
 @RequiredArgsConstructor
 public class ComodoValidation {
     private final ComodoRepository comodoRepository;

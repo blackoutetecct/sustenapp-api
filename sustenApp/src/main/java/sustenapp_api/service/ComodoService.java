@@ -27,9 +27,7 @@ public class ComodoService implements Validation<ComodoDto> {
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public ComodoModel save(ComodoDto comodo){
-        if(!validate(comodo))
-            new ExceptionGeneric("", "", 404);
-
+        validated(comodo);
         return comodoRepository.save(new ComodoMapper().toMapper(comodo));
     }
 
@@ -62,5 +60,11 @@ public class ComodoService implements Validation<ComodoDto> {
                 NotNull.isValid(value.getUsuario()),
                 usuarioValidation.isValid(value.getUsuario())
         ).allMatch(valor -> valor.equals(true));
+    }
+
+    @Override
+    public void validated(ComodoDto value) {
+        if(!validate(value))
+            new ExceptionGeneric("", "", 404);
     }
 }

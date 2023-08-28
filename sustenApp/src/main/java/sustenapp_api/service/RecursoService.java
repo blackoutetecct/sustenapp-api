@@ -5,6 +5,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sustenapp_api.component.dependency.DateDependency;
+import sustenapp_api.component.rule.Validation;
+import sustenapp_api.component.validation.*;
 import sustenapp_api.dto.POST.RecursoDto;
 import sustenapp_api.dto.PUT.RecursoPutDto;
 import sustenapp_api.exception.ExceptionGeneric;
@@ -16,19 +18,23 @@ import sustenapp_api.repository.TarifaRepository;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class RecursoService {
+public class RecursoService implements Validation<RecursoDto>  {
     private final RecursoRepository recursoRepository;
     private final TarifaRepository tarifaRepository;
     private final RecursoMapper recursoMapper;
+    private final UsuarioValidation usuarioValidation;
+    private final TarifaValidation tarifaValidation;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public RecursoModel save(@Valid RecursoDto recursoDto){
+        validated(recursoDto);
+
         var recurso = recursoMapper.toMapper(recursoDto);
         verifyUsuarioAndDate(recurso);
-
         return recursoRepository.save(recurso);
     }
 
@@ -94,5 +100,24 @@ public class RecursoService {
 
     private boolean checkDate(RecursoModel recurso) {
         return DateDependency.checkDate(recurso.getData());
+    }
+
+    @Override
+    public boolean validate(RecursoDto value) {
+        return Stream.of(
+                NotNull.isValid(value.isRenovavel()),
+                tarifaValidation.isValid(value.getTarifa()),
+                NotNull.isValid(value.getTipo()),
+                NotEmpty.isValid(value.getTipo()),
+                Size.isValid(value.getTipo(), 7, 8),
+                NotNull.isValid(value.getUsuario()),
+                usuarioValidation.isValid(value.getUsuario())
+        ).allMatch(valor -> valor.equals(true));
+    }
+
+    @Override
+    public void validated(RecursoDto value) {
+        if(!validate(value))
+            new ExceptionGeneric("", "", 404);
     }
 }
