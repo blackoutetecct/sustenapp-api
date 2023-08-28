@@ -103,7 +103,7 @@ public class TelefoneIT {
     }
 
     @Test
-    @DisplayName("ERRADO - Testes de Cobertura e Validação do Metodo listAllByUsuario")
+    @DisplayName("Testes de Cobertura e Validação do Metodo listAllByUsuario")
     public void listAllByUsuario() {
         var telefone = service.save(TelefoneUtil.factoryDto(UUID.fromString(USUARIO), NUMERO));
 

@@ -73,7 +73,7 @@ public class ComodoIT {
         assertAll(
                 () -> assertEquals(atual.getId(), service.findById(atual.getId()).getId()),
                 () -> assertThrows(
-                        Exception.class, () -> service.delete(UUID.fromString(UsuarioUtil.ID))
+                        Exception.class, () -> service.findById(UUID.fromString(UsuarioUtil.ID))
                 )
         );
     }
@@ -88,9 +88,7 @@ public class ComodoIT {
                 () -> assertNotEquals(atual, modificado),
                 () -> assertNotEquals(atual.getNome(), modificado.getNome()),
                 () -> assertEquals(atual.getUsuario(), modificado.getUsuario()),
-                () -> assertThrows(
-                        Exception.class, () -> service.delete(UUID.fromString(UsuarioUtil.ID))
-                )
+                () -> assertDoesNotThrow(() -> service.delete(UUID.fromString(UsuarioUtil.ID)))
         );
     }
 
