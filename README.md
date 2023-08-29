@@ -5,11 +5,11 @@
 </p>
 
 #
-### TASKS
+### TESTES
 
-- TESTE:
-  - *****PROBLEMAS COM BEAN VALIDATION, PROVAVEL PROBLEMA COM O MAVEN*****
-  - MELHORAR VALIDACAO EM LISTAS E CAMPOS NULOS
+- <strong>UNITARIO</strong>:
+- <strong>INTEGRACAO</strong>: https://github.com/blackoutetecct/sustenapp-api/tree/master/sustenApp/src/test/java/sustenapp_api/integration
+- <strong>CARGA</strong>:
     
 #
 ### TECNOLOGIAS
