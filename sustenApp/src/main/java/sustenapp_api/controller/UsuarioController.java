@@ -39,6 +39,11 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.findById(id));
     }
 
+    @GetMapping("/email")
+    public ResponseEntity<UsuarioModel> findByEmail(@RequestParam String email) {
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.findByEmail(email));
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<UsuarioModel>> listAll(@RequestParam(required = false) boolean full) {
         if(full)

@@ -14,9 +14,11 @@ import sustenapp_api.exception.ExceptionGeneric;
 import sustenapp_api.mapper.ComodoMapper;
 import sustenapp_api.model.persist.ComodoModel;
 import sustenapp_api.repository.ComodoRepository;
+import sustenapp_api.repository.DispositivoRepository;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -24,6 +26,7 @@ import java.util.stream.Stream;
 public class ComodoService implements Validation<ComodoDto> {
     private final ComodoRepository comodoRepository;
     private final UsuarioValidation usuarioValidation;
+    private final DispositivoRepository dispositivoRepository;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public ComodoModel save(ComodoDto comodo){
@@ -41,15 +44,25 @@ public class ComodoService implements Validation<ComodoDto> {
     }
 
     public ComodoModel findById(UUID comodo){
-        return comodoRepository.findById(comodo).orElseThrow(
+        return comodoRepository.findById(comodo).map(this::getFull).orElseThrow(
                 () -> new ExceptionGeneric("", "", 404)
         );
     }
 
     public List<ComodoModel> listAllByUsuario(UUID usuario){
         return comodoRepository.findAllByUsuario(usuario).orElseThrow(
-                () -> new ExceptionGeneric("", "", 404)
+                () -> new ExceptionGeneric("", "", 400)
         );
+    }
+
+    public ComodoModel getFull(ComodoModel comodo) {
+        comodo.setDispositivos(
+                dispositivoRepository.findAllByComodo(comodo.getId()).orElseThrow(
+                        () -> new ExceptionGeneric("", "", 400)
+                )
+        );
+
+        return comodo;
     }
 
     @Override

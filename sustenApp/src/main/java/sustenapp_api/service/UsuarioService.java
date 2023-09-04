@@ -51,12 +51,12 @@ public class UsuarioService implements Validation<UsuarioDto> {
         return usuarioRepository.findById(usuario).orElseThrow(
                 () -> new ExceptionGeneric("", "", 404)
         );
+    }
 
-        /*
-        return usuarioRepository.findById(usuario).map(this::getFull).orElseThrow(
+    public UsuarioModel findByEmail(String email){
+        return usuarioRepository.findByEmail(email).orElseThrow(
                 () -> new ExceptionGeneric("", "", 404)
         );
-        */
     }
 
     public List<UsuarioModel> listAll(){
