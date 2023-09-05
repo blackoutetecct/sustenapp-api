@@ -66,6 +66,6 @@ public class TelefoneService implements Validation<TelefoneDto>  {
     @Override
     public void validated(TelefoneDto value) {
         if(!validate(value))
-            new ExceptionGeneric("", "", 404);
+            throw new ExceptionGeneric("", "", 404);
     }
 }
