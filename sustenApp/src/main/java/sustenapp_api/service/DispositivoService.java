@@ -61,6 +61,6 @@ public class DispositivoService implements Validation<DispositivoDto> {
     @Override
     public void validated(DispositivoDto value) {
         if(!validate(value))
-            new ExceptionGeneric("", "", 500);
+            throw new ExceptionGeneric("", "", 404);
     }
 }
