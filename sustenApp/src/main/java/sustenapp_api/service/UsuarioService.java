@@ -111,6 +111,6 @@ public class UsuarioService implements Validation<UsuarioDto> {
     @Override
     public void validated(UsuarioDto value) {
         if(!validate(value))
-            new ExceptionGeneric("", "", 404);
+            throw new ExceptionGeneric("", "", 404);
     }
 }
