@@ -74,6 +74,6 @@ public class EnderecoService implements Validation<EnderecoDto> {
     @Override
     public void validated(EnderecoDto value) {
         if(!validate(value))
-            new ExceptionGeneric("", "", 404);
+            throw new ExceptionGeneric("", "", 404);
     }
 }
