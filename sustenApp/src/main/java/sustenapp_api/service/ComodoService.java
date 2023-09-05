@@ -78,6 +78,6 @@ public class ComodoService implements Validation<ComodoDto> {
     @Override
     public void validated(ComodoDto value) {
         if(!validate(value))
-            new ExceptionGeneric("", "", 404);
+            throw new ExceptionGeneric("", "", 404);
     }
 }
