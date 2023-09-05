@@ -118,6 +118,6 @@ public class RecursoService implements Validation<RecursoDto>  {
     @Override
     public void validated(RecursoDto value) {
         if(!validate(value))
-            new ExceptionGeneric("", "", 404);
+            throw new ExceptionGeneric("", "", 404);
     }
 }
