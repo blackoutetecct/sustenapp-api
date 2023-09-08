@@ -8,7 +8,9 @@ import sustenapp_api.component.rule.Validation;
 import sustenapp_api.component.validation.*;
 import sustenapp_api.dto.POST.DispositivoDto;
 import sustenapp_api.dto.PUT.DispositivoPutDto;
+import sustenapp_api.exception.BadRequestException;
 import sustenapp_api.exception.ExceptionGeneric;
+import sustenapp_api.exception.NotFoundException;
 import sustenapp_api.mapper.DispositivoMapper;
 import sustenapp_api.model.persist.DispositivoModel;
 import sustenapp_api.repository.DispositivoRepository;
@@ -41,7 +43,7 @@ public class DispositivoService implements Validation<DispositivoDto, Dispositiv
 
     public DispositivoModel findById(UUID dispositivo){
         return dispositivoRepository.findById(dispositivo).orElseThrow(
-                () -> new ExceptionGeneric("", "", 404)
+                () -> new NotFoundException("DISPOSITIVO")
         );
     }
 
@@ -59,7 +61,7 @@ public class DispositivoService implements Validation<DispositivoDto, Dispositiv
     @Override
     public void validatedPost(DispositivoDto value) {
         if(!validatePost(value))
-            throw new ExceptionGeneric("", "", 404);
+            throw new BadRequestException("DISPOSITIVO");
     }
 
     @Override
@@ -78,6 +80,6 @@ public class DispositivoService implements Validation<DispositivoDto, Dispositiv
     @Override
     public void validatedPut(DispositivoPutDto value) {
         if(!validatePut(value))
-            throw new ExceptionGeneric("", "", 404);
+            throw new BadRequestException("DISPOSITIVO");
     }
 }

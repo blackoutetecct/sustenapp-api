@@ -9,7 +9,9 @@ import sustenapp_api.component.rule.ValidationPut;
 import sustenapp_api.component.validation.*;
 import sustenapp_api.dto.POST.UsuarioDto;
 import sustenapp_api.dto.PUT.UsuarioPutDto;
+import sustenapp_api.exception.BadRequestException;
 import sustenapp_api.exception.ExceptionGeneric;
+import sustenapp_api.exception.NotFoundException;
 import sustenapp_api.mapper.UsuarioMapper;
 import sustenapp_api.model.persist.UsuarioModel;
 import sustenapp_api.repository.EnderecoRepository;
@@ -48,13 +50,13 @@ public class UsuarioService implements ValidationPost<UsuarioDto>, ValidationPut
 
     public UsuarioModel findById(UUID usuario){
         return usuarioRepository.findById(usuario).orElseThrow(
-                () -> new ExceptionGeneric("", "", 404)
+                () -> new NotFoundException("USUARIO")
         );
     }
 
     public UsuarioModel findByEmail(String email){
         return usuarioRepository.findByEmail(email).orElseThrow(
-                () -> new ExceptionGeneric("", "", 404)
+                () -> new NotFoundException("USUARIO")
         );
     }
 
@@ -107,7 +109,7 @@ public class UsuarioService implements ValidationPost<UsuarioDto>, ValidationPut
     @Override
     public void validatedPost(UsuarioDto value) {
         if(!validatePost(value))
-            throw new ExceptionGeneric("", "", 404);
+            throw new BadRequestException("USUARIO");
     }
 
     @Override
@@ -128,6 +130,6 @@ public class UsuarioService implements ValidationPost<UsuarioDto>, ValidationPut
     @Override
     public void validatedPut(UsuarioPutDto value) {
         if(!validatePut(value))
-            throw new ExceptionGeneric("", "", 404);
+            throw new BadRequestException("USUARIO");
     }
 }

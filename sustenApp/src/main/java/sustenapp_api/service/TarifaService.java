@@ -10,7 +10,9 @@ import sustenapp_api.component.rule.Validation;
 import sustenapp_api.component.validation.*;
 import sustenapp_api.dto.POST.TarifaDto;
 import sustenapp_api.dto.PUT.TarifaPutDto;
+import sustenapp_api.exception.BadRequestException;
 import sustenapp_api.exception.ExceptionGeneric;
+import sustenapp_api.exception.NotFoundException;
 import sustenapp_api.mapper.TarifaMapper;
 import sustenapp_api.model.persist.TarifaModel;
 import sustenapp_api.repository.TarifaRepository;
@@ -46,7 +48,7 @@ public class TarifaService implements Validation<TarifaDto, TarifaPutDto>  {
 
     public TarifaModel findById(UUID tarifa){
         return tarifaRepository.findById(tarifa).orElseThrow(
-                () -> new ExceptionGeneric("", "", 404)
+                () -> new NotFoundException("TARIFA")
         );
     }
 
@@ -56,7 +58,7 @@ public class TarifaService implements Validation<TarifaDto, TarifaPutDto>  {
 
     public TarifaModel findLast() {
         return tarifaRepository.getTopByData().orElseThrow(
-                () -> new ExceptionGeneric("", "", 404)
+                () -> new NotFoundException("TARIFA")
         );
     }
 
@@ -69,7 +71,7 @@ public class TarifaService implements Validation<TarifaDto, TarifaPutDto>  {
 
     private void verifyDate(TarifaModel tarifa) {
         if(checkDate(tarifa))
-            throw new ExceptionGeneric("", "", 404);
+            throw new BadRequestException("TARIFA");
     }
 
     private boolean checkDate(TarifaModel tarifa) {
@@ -92,7 +94,7 @@ public class TarifaService implements Validation<TarifaDto, TarifaPutDto>  {
     @Override
     public void validatedPost(TarifaDto value) {
         if(!validatePost(value))
-            throw new ExceptionGeneric("", "", 404);
+            throw new BadRequestException("TARIFA");
     }
 
     @Override
@@ -110,6 +112,6 @@ public class TarifaService implements Validation<TarifaDto, TarifaPutDto>  {
     @Override
     public void validatedPut(TarifaPutDto value) {
         if(!validatePut(value))
-            throw new ExceptionGeneric("", "", 404);
+            throw new BadRequestException("TARIFA");
     }
 }

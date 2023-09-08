@@ -9,7 +9,9 @@ import sustenapp_api.component.rule.Validation;
 import sustenapp_api.component.validation.*;
 import sustenapp_api.dto.POST.RecursoDto;
 import sustenapp_api.dto.PUT.RecursoPutDto;
+import sustenapp_api.exception.BadRequestException;
 import sustenapp_api.exception.ExceptionGeneric;
+import sustenapp_api.exception.NotFoundException;
 import sustenapp_api.mapper.RecursoMapper;
 import sustenapp_api.model.persist.RecursoModel;
 import sustenapp_api.model.type.RecursoTipo;
@@ -50,13 +52,13 @@ public class RecursoService implements Validation<RecursoDto, RecursoPutDto>  {
 
     public RecursoModel findById(UUID recurso){
         return recursoRepository.findById(recurso).map(this::getFull).orElseThrow(
-                () -> new ExceptionGeneric("", "", 404)
+                () -> new NotFoundException("RECURSO")
         );
     }
 
     public List<RecursoModel> listAllByUsuario(UUID usuario) {
         return recursoRepository.findAllByUsuario(usuario)
-                .orElseThrow(() -> new ExceptionGeneric("", "", 404))
+                .orElseThrow(() -> new NotFoundException("RECURSO"))
                 .stream().map(this::getFull).toList();
     }
 
@@ -74,7 +76,7 @@ public class RecursoService implements Validation<RecursoDto, RecursoPutDto>  {
 
     public RecursoModel findLast(UUID usuario, String tipo, boolean renovavel) {
         var ultimoRecurso = recursoRepository.findLast(usuario, RecursoTipo.getRecurso(tipo), renovavel).orElseThrow(
-                () -> new ExceptionGeneric("", "", 400)
+                () -> new NotFoundException("RECURSO")
         );
 
         return (
@@ -92,7 +94,7 @@ public class RecursoService implements Validation<RecursoDto, RecursoPutDto>  {
 
     private void verifyUsuarioAndDate(RecursoModel recurso) {
         if(!(checkDate(recurso)) || !(existsUsuario(recurso.getUsuario())))
-            throw new ExceptionGeneric("", "", 404);
+            throw new BadRequestException("RECURSO");
     }
 
     private boolean existsUsuario(UUID usuario){
@@ -119,7 +121,7 @@ public class RecursoService implements Validation<RecursoDto, RecursoPutDto>  {
     @Override
     public void validatedPost(RecursoDto value) {
         if(!validatePost(value))
-            throw new ExceptionGeneric("", "", 404);
+            throw new BadRequestException("RECURSO");
     }
 
     @Override
@@ -137,6 +139,6 @@ public class RecursoService implements Validation<RecursoDto, RecursoPutDto>  {
     @Override
     public void validatedPut(RecursoPutDto value) {
         if(!validatePut(value))
-            throw new ExceptionGeneric("", "", 404);
+            throw new BadRequestException("RECURSO");
     }
 }

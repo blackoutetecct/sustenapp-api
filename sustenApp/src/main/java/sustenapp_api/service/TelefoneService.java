@@ -11,7 +11,9 @@ import sustenapp_api.component.validation.TelefoneExists;
 import sustenapp_api.component.validation.UsuarioExists;
 import sustenapp_api.dto.POST.TelefoneDto;
 import sustenapp_api.dto.PUT.TelefonePutDto;
+import sustenapp_api.exception.BadRequestException;
 import sustenapp_api.exception.ExceptionGeneric;
+import sustenapp_api.exception.NotFoundException;
 import sustenapp_api.mapper.TelefoneMapper;
 import sustenapp_api.model.persist.TelefoneModel;
 import sustenapp_api.repository.TelefoneRepository;
@@ -45,13 +47,13 @@ public class TelefoneService implements Validation<TelefoneDto, TelefonePutDto> 
 
     public TelefoneModel findById(UUID telefone) {
         return telefoneRepository.findById(telefone).orElseThrow(
-                () -> new ExceptionGeneric("", "", 404)
+                () -> new NotFoundException("TELEFONE")
         );
     }
 
     public List<TelefoneModel> listAllByUsuario(UUID usuario) {
         return telefoneRepository.findAllByUsuario(usuario).orElseThrow(
-                () -> new ExceptionGeneric("", "", 404)
+                () -> new NotFoundException("TELEFONE")
         );
     }
 
@@ -68,7 +70,7 @@ public class TelefoneService implements Validation<TelefoneDto, TelefonePutDto> 
     @Override
     public void validatedPost(TelefoneDto value) {
         if(!validatePost(value))
-            throw new ExceptionGeneric("", "", 404);
+            throw new BadRequestException("TELEFONE");
     }
 
     @Override
@@ -84,6 +86,6 @@ public class TelefoneService implements Validation<TelefoneDto, TelefonePutDto> 
     @Override
     public void validatedPut(TelefonePutDto value) {
         if(!validatePut(value))
-            throw new ExceptionGeneric("", "", 404);
+            throw new BadRequestException("TELEFONE");
     }
 }

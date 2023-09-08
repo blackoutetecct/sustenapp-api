@@ -10,7 +10,9 @@ import sustenapp_api.component.validation.NotNull;
 import sustenapp_api.component.validation.UsuarioExists;
 import sustenapp_api.dto.POST.ComodoDto;
 import sustenapp_api.dto.PUT.ComodoPutDto;
+import sustenapp_api.exception.BadRequestException;
 import sustenapp_api.exception.ExceptionGeneric;
+import sustenapp_api.exception.NotFoundException;
 import sustenapp_api.mapper.ComodoMapper;
 import sustenapp_api.model.persist.ComodoModel;
 import sustenapp_api.repository.ComodoRepository;
@@ -46,20 +48,20 @@ public class ComodoService implements Validation<ComodoDto, ComodoPutDto> {
 
     public ComodoModel findById(UUID comodo){
         return comodoRepository.findById(comodo).map(this::getFull).orElseThrow(
-                () -> new ExceptionGeneric("", "", 404)
+                () -> new NotFoundException("COMODO")
         );
     }
 
     public List<ComodoModel> listAllByUsuario(UUID usuario){
         return comodoRepository.findAllByUsuario(usuario)
-                .orElseThrow(() -> new ExceptionGeneric("", "", 404))
+                .orElseThrow(() -> new NotFoundException("COMODO"))
                 .stream().map(this::getFull).toList();
     }
 
     private ComodoModel getFull(ComodoModel comodo) {
         comodo.setDispositivos(
                 dispositivoRepository.findAllByComodo(comodo.getId()).orElseThrow(
-                        () -> new ExceptionGeneric("", "", 400)
+                        () -> new NotFoundException("COMODO")
                 )
         );
 
@@ -79,7 +81,7 @@ public class ComodoService implements Validation<ComodoDto, ComodoPutDto> {
     @Override
     public void validatedPost(ComodoDto value) {
         if(!validatePost(value))
-            throw new ExceptionGeneric("", "", 404);
+            throw new BadRequestException("COMODO");
     }
 
     @Override
@@ -95,6 +97,6 @@ public class ComodoService implements Validation<ComodoDto, ComodoPutDto> {
     @Override
     public void validatedPut(ComodoPutDto value) {
         if(!validatePut(value))
-            throw new ExceptionGeneric("", "", 404);
+            throw new BadRequestException("COMODO");
     }
 }

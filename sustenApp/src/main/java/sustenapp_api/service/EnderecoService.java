@@ -8,7 +8,9 @@ import sustenapp_api.component.rule.Validation;
 import sustenapp_api.component.validation.*;
 import sustenapp_api.dto.POST.EnderecoDto;
 import sustenapp_api.dto.PUT.EnderecoPutDto;
+import sustenapp_api.exception.BadRequestException;
 import sustenapp_api.exception.ExceptionGeneric;
+import sustenapp_api.exception.NotFoundException;
 import sustenapp_api.mapper.EnderecoMapper;
 import sustenapp_api.model.persist.EnderecoModel;
 import sustenapp_api.repository.EnderecoRepository;
@@ -43,13 +45,13 @@ public class EnderecoService implements Validation<EnderecoDto, EnderecoPutDto> 
 
     public EnderecoModel findById(UUID endereco){
         return enderecoRepository.findById(endereco).orElseThrow(
-                () -> new ExceptionGeneric("", "", 404)
+                () -> new NotFoundException("ENDERECO")
         );
     }
 
     public List<EnderecoModel> listAllByUsuario(UUID usuario){
         return enderecoRepository.findAllByUsuario(usuario).orElseThrow(
-                () -> new ExceptionGeneric("", "", 404)
+                () -> new NotFoundException("ENDERECO")
         );
     }
 
@@ -75,7 +77,7 @@ public class EnderecoService implements Validation<EnderecoDto, EnderecoPutDto> 
     @Override
     public void validatedPost(EnderecoDto value) {
         if(!validatePost(value))
-            throw new ExceptionGeneric("", "", 404);
+            throw new BadRequestException("ENDERECO");
     }
 
     @Override
@@ -100,6 +102,6 @@ public class EnderecoService implements Validation<EnderecoDto, EnderecoPutDto> 
     @Override
     public void validatedPut(EnderecoPutDto value) {
         if(!validatePut(value))
-            throw new ExceptionGeneric("", "", 404);
+            throw new BadRequestException("ENDERECO");
     }
 }

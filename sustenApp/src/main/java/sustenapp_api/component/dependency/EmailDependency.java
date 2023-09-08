@@ -16,7 +16,7 @@ public class EmailDependency {
         try {
             javaMailSender.send(new EmailMapper().toMapper(emailDTO, javaMailSender));
         } catch (Exception ignored) {
-            throw new ExceptionGeneric("", "", 500);
+            throw new ExceptionGeneric("FALHA NO ENVIO DO EMAIL", "VERIFIQUE A VALIDADE DO EMAIL INFORMADO", 400);
         }
     }
 }

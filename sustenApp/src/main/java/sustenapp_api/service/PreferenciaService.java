@@ -10,7 +10,9 @@ import sustenapp_api.component.validation.PreferenciaExists;
 import sustenapp_api.component.validation.UsuarioExists;
 import sustenapp_api.dto.POST.PreferenciaDto;
 import sustenapp_api.dto.PUT.PreferenciaPutDto;
+import sustenapp_api.exception.BadRequestException;
 import sustenapp_api.exception.ExceptionGeneric;
+import sustenapp_api.exception.NotFoundException;
 import sustenapp_api.mapper.PreferenciaMapper;
 import sustenapp_api.model.persist.PreferenciaModel;
 import sustenapp_api.repository.PreferenciaRepository;
@@ -44,7 +46,7 @@ public class PreferenciaService implements Validation<PreferenciaDto, Preferenci
 
     public PreferenciaModel findById(UUID preferencia){
         return preferenciaRepository.findById(preferencia).orElseThrow(
-                () -> new ExceptionGeneric("", "", 404)
+                () -> new NotFoundException("PREFERENCIA")
         );
     }
 
@@ -63,7 +65,7 @@ public class PreferenciaService implements Validation<PreferenciaDto, Preferenci
     @Override
     public void validatedPost(PreferenciaDto value) {
         if(!validatePost(value))
-            throw new ExceptionGeneric("","", 404);
+            throw new BadRequestException("PREFERENCIA");
     }
 
     @Override
@@ -77,6 +79,6 @@ public class PreferenciaService implements Validation<PreferenciaDto, Preferenci
     @Override
     public void validatedPut(PreferenciaPutDto value) {
         if(!validatePut(value))
-            throw new ExceptionGeneric("","", 404);
+            throw new BadRequestException("PREFERENCIA");
     }
 }
