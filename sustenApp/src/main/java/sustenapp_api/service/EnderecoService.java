@@ -5,10 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sustenapp_api.component.rule.Validation;
-import sustenapp_api.component.validation.NotEmpty;
-import sustenapp_api.component.validation.NotNull;
-import sustenapp_api.component.validation.UsuarioValidation;
-import sustenapp_api.dto.POST.ComodoDto;
+import sustenapp_api.component.validation.*;
 import sustenapp_api.dto.POST.EnderecoDto;
 import sustenapp_api.dto.PUT.EnderecoPutDto;
 import sustenapp_api.exception.ExceptionGeneric;
@@ -22,13 +19,15 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class EnderecoService implements Validation<EnderecoDto> {
+public class EnderecoService implements Validation<EnderecoDto, EnderecoPutDto> {
     private final EnderecoRepository enderecoRepository;
-    private final UsuarioValidation usuarioValidation;
+    private final UsuarioExists usuarioValidation;
+    private final EnderecoExists enderecoExists;
+    private final EnderecoValid enderecoValid;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public EnderecoModel save(@Valid EnderecoDto endereco){
-        validated(endereco);
+        validatedPost(endereco);
         return enderecoRepository.save(new EnderecoMapper().toMapper(endereco));
     }
 
@@ -37,7 +36,8 @@ public class EnderecoService implements Validation<EnderecoDto> {
         enderecoRepository.deleteById(endereco);
     }
 
-    public EnderecoModel update(@Valid EnderecoPutDto endereco){
+    public EnderecoModel update(EnderecoPutDto endereco){
+        validatedPut(endereco);
         return enderecoRepository.save(new EnderecoMapper().toMapper(endereco, findById(endereco.getId())));
     }
 
@@ -54,7 +54,7 @@ public class EnderecoService implements Validation<EnderecoDto> {
     }
 
     @Override
-    public boolean validate(EnderecoDto value) {
+    public boolean validatePost(EnderecoDto value) {
         return Stream.of(
                 NotNull.isValid(value.getCep()),
                 NotEmpty.isValid(value.getCep()),
@@ -67,13 +67,39 @@ public class EnderecoService implements Validation<EnderecoDto> {
                 NotNull.isValid(value.getComplemento()),
                 NotEmpty.isValid(value.getComplemento()),
                 NotNull.isValid(value.getUsuario()),
-                usuarioValidation.isValid(value.getUsuario())
+                usuarioValidation.isValid(value.getUsuario()),
+                enderecoValid.isValid(value)
         ).allMatch(valor -> valor.equals(true));
     }
 
     @Override
-    public void validated(EnderecoDto value) {
-        if(!validate(value))
+    public void validatedPost(EnderecoDto value) {
+        if(!validatePost(value))
+            throw new ExceptionGeneric("", "", 404);
+    }
+
+    @Override
+    public boolean validatePut(EnderecoPutDto value) {
+        return Stream.of(
+                NotNull.isValid(value.getCep()),
+                NotEmpty.isValid(value.getCep()),
+                NotNull.isValid(value.getEstado()),
+                NotEmpty.isValid(value.getEstado()),
+                NotNull.isValid(value.getCidade()),
+                NotEmpty.isValid(value.getCidade()),
+                NotNull.isValid(value.getLogradouro()),
+                NotEmpty.isValid(value.getLogradouro()),
+                NotNull.isValid(value.getComplemento()),
+                NotEmpty.isValid(value.getComplemento()),
+                NotNull.isValid(value.getId()),
+                enderecoValid.isValid(value),
+                enderecoExists.isValid(value.getId())
+        ).allMatch(valor -> valor.equals(true));
+    }
+
+    @Override
+    public void validatedPut(EnderecoPutDto value) {
+        if(!validatePut(value))
             throw new ExceptionGeneric("", "", 404);
     }
 }

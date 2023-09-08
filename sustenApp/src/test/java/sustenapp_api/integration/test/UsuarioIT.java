@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import sustenapp_api.component.validation.UsuarioValidation;
 import sustenapp_api.dto.POST.UsuarioDto;
 import sustenapp_api.integration.util.UsuarioUtil;
 import sustenapp_api.repository.UsuarioRepository;
@@ -49,11 +48,11 @@ public class UsuarioIT {
                         Exception.class, () -> service.save(UsuarioUtil.factoryDto(NOME.concat("1"), CPF, SENHA, EMAIL, TIPO))
                 ),
                 () -> assertThrows(
-                        // @EmailValidation
+                        // @EmailValid
                         Exception.class, () -> service.save(UsuarioUtil.factoryDto(NOME, CPF, SENHA, "TESTE", TIPO))
                 ),
                 () -> assertThrows(
-                        // @CPFVerify e @CPFValidation -> suspeito
+                        // @CPFVerify e @CPFValid -> suspeito
                         Exception.class, () -> service.save(UsuarioUtil.factoryDto(NOME, "123456789", SENHA, EMAIL, TIPO))
                 ),
                 () -> assertThrows(
@@ -111,7 +110,7 @@ public class UsuarioIT {
     @DisplayName("Testes de Cobertura e Validacao do Metodo ListAll")
     public void listAll() {
         var usuario_01 = service.save(factoryDto());
-        var usuario_02 = service.save(UsuarioUtil.factoryDto(NOME, "90977833054", SENHA, "teste@email", TIPO));
+        var usuario_02 = service.save(UsuarioUtil.factoryDto(NOME, "90977833054", SENHA, "teste@email.com", TIPO));
 
         assertEquals(
                 List.of(usuario_01, usuario_02), service.listAll()

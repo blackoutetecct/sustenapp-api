@@ -7,12 +7,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import sustenapp_api.component.dependency.DateDependency;
 import sustenapp_api.component.rule.Validation;
-import sustenapp_api.component.validation.NotEmpty;
-import sustenapp_api.component.validation.NotNull;
-import sustenapp_api.component.validation.Positive;
-import sustenapp_api.component.validation.Size;
-import sustenapp_api.dto.POST.ComodoDto;
+import sustenapp_api.component.validation.*;
 import sustenapp_api.dto.POST.TarifaDto;
+import sustenapp_api.dto.PUT.TarifaPutDto;
 import sustenapp_api.exception.ExceptionGeneric;
 import sustenapp_api.mapper.TarifaMapper;
 import sustenapp_api.model.persist.TarifaModel;
@@ -24,12 +21,13 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class TarifaService implements Validation<TarifaDto>  {
+public class TarifaService implements Validation<TarifaDto, TarifaPutDto>  {
     private final TarifaRepository tarifaRepository;
+    private final TarifaExists tarifaExists;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public TarifaModel save(@Valid TarifaDto tarifaDto){
-        validated(tarifaDto);
+        validatedPost(tarifaDto);
         var tarifa = new TarifaMapper().toMapper(tarifaDto);
         verifyDate(tarifa);
 
@@ -79,7 +77,7 @@ public class TarifaService implements Validation<TarifaDto>  {
     }
 
     @Override
-    public boolean validate(TarifaDto value) {
+    public boolean validatePost(TarifaDto value) {
         return Stream.of(
                 NotNull.isValid(value.getPreco()),
                 Positive.isValid(value.getPreco()),
@@ -92,8 +90,26 @@ public class TarifaService implements Validation<TarifaDto>  {
     }
 
     @Override
-    public void validated(TarifaDto value) {
-        if(!validate(value))
+    public void validatedPost(TarifaDto value) {
+        if(!validatePost(value))
+            throw new ExceptionGeneric("", "", 404);
+    }
+
+    @Override
+    public boolean validatePut(TarifaPutDto value) {
+        return Stream.of(
+                NotNull.isValid(value.getPreco()),
+                Positive.isValid(value.getPreco()),
+                NotNull.isValid(value.getObservacao()),
+                NotEmpty.isValid(value.getObservacao()),
+                NotNull.isValid(value.getId()),
+                tarifaExists.isValid(value.getId())
+        ).allMatch(valor -> valor.equals(true));
+    }
+
+    @Override
+    public void validatedPut(TarifaPutDto value) {
+        if(!validatePut(value))
             throw new ExceptionGeneric("", "", 404);
     }
 }

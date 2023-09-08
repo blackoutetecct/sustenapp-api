@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import sustenapp_api.component.rule.Validation;
 import sustenapp_api.component.validation.NotEmpty;
 import sustenapp_api.component.validation.NotNull;
-import sustenapp_api.component.validation.UsuarioValidation;
-import sustenapp_api.dto.POST.ComodoDto;
+import sustenapp_api.component.validation.TelefoneExists;
+import sustenapp_api.component.validation.UsuarioExists;
 import sustenapp_api.dto.POST.TelefoneDto;
 import sustenapp_api.dto.PUT.TelefonePutDto;
 import sustenapp_api.exception.ExceptionGeneric;
@@ -22,13 +22,14 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class TelefoneService implements Validation<TelefoneDto>  {
+public class TelefoneService implements Validation<TelefoneDto, TelefonePutDto>  {
     private final TelefoneRepository telefoneRepository;
-    private final UsuarioValidation usuarioValidation;
+    private final UsuarioExists usuarioValidation;
+    private final TelefoneExists telefoneExists;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public TelefoneModel save(@Valid TelefoneDto telefone) {
-      validated(telefone);
+      validatedPost(telefone);
       return telefoneRepository.save(new TelefoneMapper().toMapper(telefone));
     }
 
@@ -37,7 +38,8 @@ public class TelefoneService implements Validation<TelefoneDto>  {
         telefoneRepository.deleteById(telefone);
     }
 
-    public TelefoneModel update(@Valid TelefonePutDto telefone) {
+    public TelefoneModel update(TelefonePutDto telefone) {
+        validatePut(telefone);
         return telefoneRepository.save(new TelefoneMapper().toMapper(telefone, findById(telefone.getId())));
     }
 
@@ -54,7 +56,7 @@ public class TelefoneService implements Validation<TelefoneDto>  {
     }
 
     @Override
-    public boolean validate(TelefoneDto value) {
+    public boolean validatePost(TelefoneDto value) {
         return Stream.of(
                 NotNull.isValid(value.getNumero()),
                 NotEmpty.isValid(value.getNumero()),
@@ -64,8 +66,24 @@ public class TelefoneService implements Validation<TelefoneDto>  {
     }
 
     @Override
-    public void validated(TelefoneDto value) {
-        if(!validate(value))
+    public void validatedPost(TelefoneDto value) {
+        if(!validatePost(value))
+            throw new ExceptionGeneric("", "", 404);
+    }
+
+    @Override
+    public boolean validatePut(TelefonePutDto value) {
+        return Stream.of(
+                NotNull.isValid(value.getNumero()),
+                NotEmpty.isValid(value.getNumero()),
+                NotNull.isValid(value.getId()),
+                telefoneExists.isValid(value.getId())
+        ).allMatch(valor -> valor.equals(true));
+    }
+
+    @Override
+    public void validatedPut(TelefonePutDto value) {
+        if(!validatePut(value))
             throw new ExceptionGeneric("", "", 404);
     }
 }

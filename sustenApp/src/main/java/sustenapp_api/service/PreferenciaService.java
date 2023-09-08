@@ -4,6 +4,10 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import sustenapp_api.component.rule.Validation;
+import sustenapp_api.component.validation.NotNull;
+import sustenapp_api.component.validation.PreferenciaExists;
+import sustenapp_api.component.validation.UsuarioExists;
 import sustenapp_api.dto.POST.PreferenciaDto;
 import sustenapp_api.dto.PUT.PreferenciaPutDto;
 import sustenapp_api.exception.ExceptionGeneric;
@@ -13,23 +17,28 @@ import sustenapp_api.repository.PreferenciaRepository;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class PreferenciaService {
+public class PreferenciaService implements Validation<PreferenciaDto, PreferenciaPutDto> {
     private final PreferenciaRepository preferenciaRepository;
+    private final UsuarioExists usuarioValidation;
+    private final PreferenciaExists preferenciaExists;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
-    public PreferenciaModel save(@Valid PreferenciaDto preferencia){
+    public PreferenciaModel save(PreferenciaDto preferencia){
+        validatedPost(preferencia);
         return preferenciaRepository.save(new PreferenciaMapper().toMapper(preferencia));
     }
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
-    public void delete(UUID preferencia){
+    public void delete(UUID preferencia) {
         preferenciaRepository.deleteById(preferencia);
     }
 
-    public PreferenciaModel update(@Valid PreferenciaPutDto preferencia){
+    public PreferenciaModel update(PreferenciaPutDto preferencia){
+        validatePut(preferencia);
         return preferenciaRepository.save(new PreferenciaMapper().toMapper(preferencia, findById(preferencia.getId())));
     }
 
@@ -41,5 +50,33 @@ public class PreferenciaService {
 
     public List<PreferenciaModel> listAll(){
         return preferenciaRepository.findAll();
+    }
+
+    @Override
+    public boolean validatePost(PreferenciaDto value) {
+        return Stream.of(
+                NotNull.isValid(value.getUsuario()),
+                usuarioValidation.isValid(value.getUsuario())
+        ).allMatch(valor -> valor.equals(true));
+    }
+
+    @Override
+    public void validatedPost(PreferenciaDto value) {
+        if(!validatePost(value))
+            throw new ExceptionGeneric("","", 404);
+    }
+
+    @Override
+    public boolean validatePut(PreferenciaPutDto value) {
+        return Stream.of(
+                NotNull.isValid(value.getId()),
+                preferenciaExists.isValid(value.getId())
+        ).allMatch(valor -> valor.equals(true));
+    }
+
+    @Override
+    public void validatedPut(PreferenciaPutDto value) {
+        if(!validatePut(value))
+            throw new ExceptionGeneric("","", 404);
     }
 }

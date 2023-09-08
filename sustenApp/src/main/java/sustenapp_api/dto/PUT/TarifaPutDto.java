@@ -11,12 +11,7 @@ import java.util.UUID;
 @Data
 @Builder
 public class TarifaPutDto {
-    @NotNull @NotEmpty
     private UUID id;
-
-    @NotNull @Positive
     private Double preco ;
-
-    @NotNull @NotEmpty
     private String observacao;
 }

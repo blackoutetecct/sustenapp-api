@@ -8,6 +8,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import sustenapp_api.component.dependency.EmailDependency;
 import sustenapp_api.component.treatment.EmailTreatment;
+import sustenapp_api.component.validation.EmailExists;
+import sustenapp_api.component.validation.RecuperacaoExists;
 import sustenapp_api.dto.POST.EmailDto;
 import sustenapp_api.dto.PUT.RecuperacaoDto;
 import sustenapp_api.exception.ExceptionGeneric;
@@ -22,11 +24,13 @@ import java.util.Random;
 public class RecuperacaoService {
     private final RecuperacaoRepository recuperacaoRepository;
     private final UsuarioRepository usuarioRepository;
+    private final EmailExists emailExists;
+    private final RecuperacaoExists recuperacaoExists;
     private final EmailDependency emailDependency;
     private final EmailTreatment emailTreatment;
 
     public RecuperacaoModel check(String email) {
-        RecuperacaoModel recuperacao = (existsEmail(email)) ? findCodigo(email) : save(email);
+        RecuperacaoModel recuperacao = (emailExists.isValid(email)) ? findCodigo(email) : save(email);
         sendEmail(recuperacao);
 
         return recuperacao;
@@ -90,24 +94,12 @@ public class RecuperacaoService {
     }
 
     private void verifyExistsEmailAndCodigo(String email, String codigo) {
-        if (existsEmailAndCodigo(email, codigo))
+        if (recuperacaoExists.isValid(email, codigo))
             throw new ExceptionGeneric("", "", 404);
     }
 
     private void verifyExistsUsuario(String email){
-        if(!existsUsuario(email))
+        if(!emailExists.isValid(email))
             throw new ExceptionGeneric("", "", 404);
-    }
-
-    private boolean existsEmail(String email) {
-        return recuperacaoRepository.existsByEmail(email);
-    }
-
-    private boolean existsUsuario(String email){
-        return usuarioRepository.existsByEmail(email);
-    }
-
-    private boolean existsEmailAndCodigo(String email, String codigo) {
-        return recuperacaoRepository.existsByEmailAndCodigo(email, codigo);
     }
 }

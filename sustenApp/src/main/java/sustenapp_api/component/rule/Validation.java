@@ -1,7 +1,8 @@
 package sustenapp_api.component.rule;
 
-public interface Validation<T> {
-    boolean validate(T value);
-
-    void validated(T value);
+public interface Validation<E, T> {
+    boolean validatePost(E value);
+    void validatedPost(E value);
+    boolean validatePut(T value);
+    void validatedPut(T value);
 }

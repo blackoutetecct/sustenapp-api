@@ -22,16 +22,16 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class RecursoService implements Validation<RecursoDto>  {
+public class RecursoService implements Validation<RecursoDto, RecursoPutDto>  {
     private final RecursoRepository recursoRepository;
     private final TarifaRepository tarifaRepository;
     private final RecursoMapper recursoMapper;
-    private final UsuarioValidation usuarioValidation;
-    private final TarifaValidation tarifaValidation;
+    private final UsuarioExists usuarioValidation;
+    private final TarifaExists tarifaValidation;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public RecursoModel save(@Valid RecursoDto recursoDto){
-        validated(recursoDto);
+        validatedPost(recursoDto);
 
         var recurso = recursoMapper.toMapper(recursoDto);
         verifyUsuarioAndDate(recurso);
@@ -43,7 +43,8 @@ public class RecursoService implements Validation<RecursoDto>  {
         recursoRepository.deleteById(recurso);
     }
 
-    public RecursoModel update(@Valid RecursoPutDto recurso){
+    public RecursoModel update(RecursoPutDto recurso){
+        validatePut(recurso);
         return recursoRepository.save(recursoMapper.toMapper(recurso, findById(recurso.getId())));
     }
 
@@ -103,7 +104,7 @@ public class RecursoService implements Validation<RecursoDto>  {
     }
 
     @Override
-    public boolean validate(RecursoDto value) {
+    public boolean validatePost(RecursoDto value) {
         return Stream.of(
                 NotNull.isValid(value.isRenovavel()),
                 tarifaValidation.isValid(value.getTarifa()),
@@ -116,8 +117,26 @@ public class RecursoService implements Validation<RecursoDto>  {
     }
 
     @Override
-    public void validated(RecursoDto value) {
-        if(!validate(value))
+    public void validatedPost(RecursoDto value) {
+        if(!validatePost(value))
+            throw new ExceptionGeneric("", "", 404);
+    }
+
+    @Override
+    public boolean validatePut(RecursoPutDto value) {
+        return Stream.of(
+                NotNull.isValid(value.isRenovavel()),
+                NotNull.isValid(value.getId()),
+                tarifaValidation.isValid(value.getTarifa()),
+                NotNull.isValid(value.getTipo()),
+                NotEmpty.isValid(value.getTipo()),
+                Size.isValid(value.getTipo(), 7, 8)
+        ).allMatch(valor -> valor.equals(true));
+    }
+
+    @Override
+    public void validatedPut(RecursoPutDto value) {
+        if(!validatePut(value))
             throw new ExceptionGeneric("", "", 404);
     }
 }

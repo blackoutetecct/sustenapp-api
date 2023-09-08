@@ -4,18 +4,14 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import sustenapp_api.component.rule.Validation;
-import sustenapp_api.component.validation.CPFValidation;
-import sustenapp_api.component.validation.EmailValidation;
-import sustenapp_api.component.validation.NotEmpty;
-import sustenapp_api.component.validation.NotNull;
-import sustenapp_api.dto.POST.ComodoDto;
+import sustenapp_api.component.rule.ValidationPost;
+import sustenapp_api.component.rule.ValidationPut;
+import sustenapp_api.component.validation.*;
 import sustenapp_api.dto.POST.UsuarioDto;
 import sustenapp_api.dto.PUT.UsuarioPutDto;
 import sustenapp_api.exception.ExceptionGeneric;
 import sustenapp_api.mapper.UsuarioMapper;
 import sustenapp_api.model.persist.UsuarioModel;
-import sustenapp_api.model.type.PerfilTipo;
 import sustenapp_api.repository.EnderecoRepository;
 import sustenapp_api.repository.TelefoneRepository;
 import sustenapp_api.repository.UsuarioRepository;
@@ -26,14 +22,16 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class UsuarioService implements Validation<UsuarioDto> {
+public class UsuarioService implements ValidationPost<UsuarioDto>, ValidationPut<UsuarioPutDto> {
     private final UsuarioRepository usuarioRepository;
     private final EnderecoRepository enderecoRepository;
     private final TelefoneRepository telefoneRepository;
+    private final UsuarioExists usuarioExists;
+    private final EmailOrCPFExists emailOrCPFExists;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
-    public UsuarioModel save(@Valid UsuarioDto usuario){
-        validated(usuario);
+    public UsuarioModel save(UsuarioDto usuario){
+        validatedPost(usuario);
         verifyExistsEmailOrCPF(usuario.getEmail(), usuario.getCpf());
         return usuarioRepository.save(new UsuarioMapper().toMapper(usuario));
     }
@@ -43,7 +41,8 @@ public class UsuarioService implements Validation<UsuarioDto> {
         usuarioRepository.deleteById(usuario);
     }
 
-    public UsuarioModel update(@Valid UsuarioPutDto usuario){
+    public UsuarioModel update(UsuarioPutDto usuario){
+        validatePut(usuario);
         return usuarioRepository.save(new UsuarioMapper().toMapper(usuario, findById(usuario.getId())));
     }
 
@@ -84,16 +83,12 @@ public class UsuarioService implements Validation<UsuarioDto> {
     }
 
     private void verifyExistsEmailOrCPF(String email, String cpf){
-        if(existsEmailOrCPF(email, cpf))
+        if(emailOrCPFExists.isValid(email, cpf))
             throw new ExceptionGeneric("", "", 404);
     }
 
-    private boolean existsEmailOrCPF(String email, String cpf){
-        return usuarioRepository.existsByEmailOrCpf(email, cpf);
-    }
-
     @Override
-    public boolean validate(UsuarioDto value) {
+    public boolean validatePost(UsuarioDto value) {
         return Stream.of(
                 NotNull.isValid(value.getNome()),
                 NotEmpty.isValid(value.getNome()),
@@ -102,15 +97,37 @@ public class UsuarioService implements Validation<UsuarioDto> {
                 NotNull.isValid(value.getTipo()),
                 NotEmpty.isValid(value.getTipo()),
                 NotNull.isValid(value.getEmail()),
-                EmailValidation.isValid(value.getEmail()),
+                StringValid.isValid(value.getNome()),
+                EmailValid.isValid(value.getEmail()),
                 NotNull.isValid(value.getCpf()),
-                CPFValidation.isValid(value.getCpf())
+                CPFValid.isValid(value.getCpf())
         ).allMatch(valor -> valor.equals(true));
     }
 
     @Override
-    public void validated(UsuarioDto value) {
-        if(!validate(value))
+    public void validatedPost(UsuarioDto value) {
+        if(!validatePost(value))
+            throw new ExceptionGeneric("", "", 404);
+    }
+
+    @Override
+    public boolean validatePut(UsuarioPutDto value) {
+        return Stream.of(
+                NotNull.isValid(value.getNome()),
+                NotEmpty.isValid(value.getNome()),
+                NotNull.isValid(value.getSenha()),
+                NotEmpty.isValid(value.getSenha()),
+                NotNull.isValid(value.getEmail()),
+                StringValid.isValid(value.getNome()),
+                EmailValid.isValid(value.getEmail()),
+                NotNull.isValid(value.getId()),
+                usuarioExists.isValid(value.getId())
+        ).allMatch(valor -> valor.equals(true));
+    }
+
+    @Override
+    public void validatedPut(UsuarioPutDto value) {
+        if(!validatePut(value))
             throw new ExceptionGeneric("", "", 404);
     }
 }
