@@ -29,8 +29,15 @@
 ![Email](https://img.shields.io/badge/Gmail-0D1117?style=for-the-badge&logo=gmail&logoColor=D14836&labelColor=0D1117)&nbsp;
 
 #
+### DOMINIO DA API
+
+```
+https://sustenapp-api-production.up.railway.app
+```
+
+#
 ### DOCUMENTACAO DA API
 
 ```
-<host>:<porta>/swagger-ui/index.html#
+https://sustenapp-api-production.up.railway.app/swagger-ui/index.html
 ```
