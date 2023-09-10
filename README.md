@@ -8,11 +8,106 @@
 ### TESTES
 
 - <strong>UNITARIO</strong>:
-  - https://github.com/blackoutetecct/sustenapp-api/tree/master/sustenApp/src/test/java/sustenapp_api/unit
+```bash
+cd sustenApp/src/test/java/sustenapp_api/unit
+```
+
 - <strong>INTEGRACAO</strong>:
-  - https://github.com/blackoutetecct/sustenapp-api/tree/master/sustenApp/src/test/java/sustenapp_api/integration
+```bash
+cd sustenApp/src/test/java/sustenapp_api/integration
+```
+
 - <strong>CARGA</strong>:
-  - https://github.com/blackoutetecct/sustenapp-api/tree/master/sustenApp/src/test/java/sustenapp_api/stress
+```bash 
+cd sustenApp/src/test/java/sustenapp_api/stress
+```
+
+#
+### EXECUCAO DE TESTES DE CARGA
+- Mova o diretorio de testes de carga para o pacote principal
+
+```bash 
+mv sustenApp/src/test/java/sustenapp_api/stress sustenApp/src/main/java/sustenapp_api/test/stress
+```
+
+- Renomeie o pacote contido nos arquivos `executor/SimulatorPersistEntity.java` e `util/FactoryEntity.java`
+
+```java
+package sustenapp_api.test.stress.executor/util;
+```
+
+- Realize as seguintes alteracoes nos arquivos respectivos:
+
+```properties
+# sustenApp/src/main/resources/application.properties
+
+spring.datasource.username = postgres
+spring.datasource.password = 123456789
+spring.datasource.url = jdbc:postgresql://localhost:5432/postgres
+spring.jpa.hibernate.ddl-auto = create-drop
+
+spring.security.enabled=false
+```
+
+```java
+// sustenApp/src/main/java/sustenapp_api/component/security/ConfigurationSecurity.java
+
+[...]
+
+@Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
+public class ConfigurationSecurity {
+    private final FilterSecurity filterSecurity;
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
+                .httpBasic(withDefaults())
+                .authorizeHttpRequests(
+                        auth ->
+                                auth.requestMatchers("/**").permitAll()
+                )
+                .headers().frameOptions().disable().and()
+                .cors().disable()
+                .csrf().disable()
+                .formLogin().disable()
+                .addFilterBefore(filterSecurity, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .build();
+    }
+
+    [...]
+}
+```
+
+```java
+// sustenApp/src/main/java/sustenapp_api/SustenAppApiApplication.java
+
+[...]
+
+import sustenapp_api.test.stress.executor.SimulatorPersistEntity;
+
+@SpringBootApplication
+@EnableRetry
+@EnableScheduling
+public class SustenAppApiApplication {
+    @Autowired private SimulatorPersistEntity simulator;
+    private static SimulatorPersistEntity simulatorStatic;
+
+    @PostConstruct
+    private void initialization() {
+        simulatorStatic = simulator;
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(SustenAppApiApplication.class, args);
+        simulatorStatic.runSimulationSaveTest();
+    }
+}
+```
+
+- Execute o teste de carga contido no `sustenApp\src\main\java\sustenapp_api\test\stress\test\BateriaTestesEstresse.jmx` atraves do JMeter.
     
 #
 ### TECNOLOGIAS
@@ -39,5 +134,5 @@ https://sustenapp-api-production.up.railway.app
 ### DOCUMENTACAO DA API
 
 ```
-https://sustenapp-api-production.up.railway.app/swagger-ui/index.html
+<servidor>/swagger-ui/index.html
 ```
