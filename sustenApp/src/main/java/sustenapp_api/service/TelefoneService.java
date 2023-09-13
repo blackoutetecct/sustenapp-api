@@ -30,9 +30,9 @@ public class TelefoneService implements Validation<TelefoneDto, TelefonePutDto> 
     private final TelefoneExists telefoneExists;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
-    public TelefoneModel save(@Valid TelefoneDto telefone) {
+    public TelefoneModel save(TelefoneDto telefone) {
       validatedPost(telefone);
-      return telefoneRepository.save(new TelefoneMapper().toMapper(telefone));
+      return telefoneRepository.save(TelefoneMapper.toMapper(telefone));
     }
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
@@ -42,7 +42,7 @@ public class TelefoneService implements Validation<TelefoneDto, TelefonePutDto> 
 
     public TelefoneModel update(TelefonePutDto telefone) {
         validatePut(telefone);
-        return telefoneRepository.save(new TelefoneMapper().toMapper(telefone, findById(telefone.getId())));
+        return telefoneRepository.save(TelefoneMapper.toMapper(telefone, findById(telefone.getId())));
     }
 
     public TelefoneModel findById(UUID telefone) {

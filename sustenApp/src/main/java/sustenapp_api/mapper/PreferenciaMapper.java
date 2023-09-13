@@ -6,13 +6,13 @@ import sustenapp_api.dto.PUT.PreferenciaPutDto;
 import sustenapp_api.model.persist.PreferenciaModel;
 
 public class PreferenciaMapper {
-    public PreferenciaModel toMapper(PreferenciaDto objetoEntrada){
+    public static PreferenciaModel toMapper(PreferenciaDto objetoEntrada){
         PreferenciaModel objetoSaida = new PreferenciaModel();
         BeanUtils.copyProperties(objetoEntrada, objetoSaida);
         return objetoSaida;
     }
 
-    public PreferenciaModel toMapper(PreferenciaPutDto objetoEntrada, PreferenciaModel objetoSaida){
+    public static PreferenciaModel toMapper(PreferenciaPutDto objetoEntrada, PreferenciaModel objetoSaida){
         BeanUtils.copyProperties(objetoEntrada, objetoSaida);
         return objetoSaida;
     }

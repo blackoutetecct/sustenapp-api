@@ -2,10 +2,7 @@ package sustenapp_api.component.validation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import sustenapp_api.repository.ComodoRepository;
 import sustenapp_api.repository.RecuperacaoRepository;
-
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor

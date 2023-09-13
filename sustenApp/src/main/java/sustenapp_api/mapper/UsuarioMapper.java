@@ -8,7 +8,7 @@ import sustenapp_api.model.persist.UsuarioModel;
 import sustenapp_api.model.type.PerfilTipo;
 
 public class UsuarioMapper {
-    public UsuarioModel toMapper(UsuarioDto objetoEntrada){
+    public static UsuarioModel toMapper(UsuarioDto objetoEntrada){
         return UsuarioModel
                 .builder()
                 .nome(objetoEntrada.getNome())
@@ -19,13 +19,13 @@ public class UsuarioMapper {
                 .build();
     }
 
-    public UsuarioModel toMapper(UsuarioPutDto objetoEntrada, UsuarioModel objetoSaida){
+    public static UsuarioModel toMapper(UsuarioPutDto objetoEntrada, UsuarioModel objetoSaida){
         BeanUtils.copyProperties(objetoEntrada, objetoSaida);
         objetoSaida.setSenha(encode(objetoEntrada.getSenha()));
         return objetoSaida;
     }
 
-    private String encode(String senha) {
+    private static String encode(String senha) {
         return new BCryptPasswordEncoder().encode(senha);
     }
 }

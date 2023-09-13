@@ -31,8 +31,8 @@ public class RecuperacaoController {
         return ResponseEntity.status(HttpStatus.OK).body(recuperacaoService.findCodigo(email));
     }
 
-    @GetMapping("/change")
-    public ResponseEntity<RecuperacaoModel> change(@RequestBody @Valid RecuperacaoDto recuperacao) {
+    @PostMapping("/change")
+    public ResponseEntity<RecuperacaoModel> change(@RequestBody RecuperacaoDto recuperacao) {
         recuperacaoService.change(recuperacao);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }

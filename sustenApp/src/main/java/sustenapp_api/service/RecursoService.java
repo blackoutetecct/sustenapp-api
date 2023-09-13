@@ -32,7 +32,7 @@ public class RecursoService implements Validation<RecursoDto, RecursoPutDto>  {
     private final TarifaExists tarifaValidation;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
-    public RecursoModel save(@Valid RecursoDto recursoDto){
+    public RecursoModel save(RecursoDto recursoDto){
         validatedPost(recursoDto);
 
         var recurso = recursoMapper.toMapper(recursoDto);
@@ -75,7 +75,7 @@ public class RecursoService implements Validation<RecursoDto, RecursoPutDto>  {
     }
 
     public RecursoModel findLast(UUID usuario, String tipo, boolean renovavel) {
-        var ultimoRecurso = recursoRepository.findLast(usuario, RecursoTipo.getRecurso(tipo), renovavel).orElseThrow(
+        var ultimoRecurso = recursoRepository.findLast(usuario, tipo, renovavel).orElseThrow(
                 () -> new NotFoundException("RECURSO")
         );
 
@@ -129,10 +129,7 @@ public class RecursoService implements Validation<RecursoDto, RecursoPutDto>  {
         return Stream.of(
                 NotNull.isValid(value.isRenovavel()),
                 NotNull.isValid(value.getId()),
-                tarifaValidation.isValid(value.getTarifa()),
-                NotNull.isValid(value.getTipo()),
-                NotEmpty.isValid(value.getTipo()),
-                Size.isValid(value.getTipo(), 7, 8)
+                tarifaValidation.isValid(value.getTarifa())
         ).allMatch(valor -> valor.equals(true));
     }
 

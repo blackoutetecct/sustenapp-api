@@ -1,7 +1,6 @@
 package sustenapp_api.service;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sustenapp_api.component.rule.Validation;
@@ -26,9 +25,9 @@ public class DispositivoService implements Validation<DispositivoDto, Dispositiv
     private final DispositivoExists dispositivoExists;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
-    public DispositivoModel save(@Valid DispositivoDto dispositivo){
+    public DispositivoModel save(DispositivoDto dispositivo){
         validatedPost(dispositivo);
-        return dispositivoRepository.save(new DispositivoMapper().toMapper(dispositivo));
+        return dispositivoRepository.save(DispositivoMapper.toMapper(dispositivo));
     }
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
@@ -38,7 +37,7 @@ public class DispositivoService implements Validation<DispositivoDto, Dispositiv
 
     public DispositivoModel update(DispositivoPutDto dispositivo){
         validatedPut(dispositivo);
-        return dispositivoRepository.save(new DispositivoMapper().toMapper(dispositivo, findById(dispositivo.getId())));
+        return dispositivoRepository.save(DispositivoMapper.toMapper(dispositivo, findById(dispositivo.getId())));
     }
 
     public DispositivoModel findById(UUID dispositivo){

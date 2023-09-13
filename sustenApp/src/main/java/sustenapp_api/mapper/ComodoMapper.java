@@ -6,13 +6,13 @@ import sustenapp_api.dto.PUT.ComodoPutDto;
 import sustenapp_api.model.persist.ComodoModel;
 
 public class ComodoMapper {
-    public ComodoModel toMapper(ComodoDto objetoEntrada){
+    public static ComodoModel toMapper(ComodoDto objetoEntrada){
         ComodoModel objetoSaida = new ComodoModel();
         BeanUtils.copyProperties(objetoEntrada, objetoSaida);
         return objetoSaida;
     }
 
-    public ComodoModel toMapper(ComodoPutDto objetoEntrada, ComodoModel objetoSaida){
+    public static ComodoModel toMapper(ComodoPutDto objetoEntrada, ComodoModel objetoSaida){
         BeanUtils.copyProperties(objetoEntrada, objetoSaida);
         return objetoSaida;
     }

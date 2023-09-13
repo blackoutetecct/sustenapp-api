@@ -53,6 +53,9 @@ public class ComodoIT {
                () -> assertThrows(
                        Exception.class, () -> service.save(ComodoDto.builder().build())
                ),
+                () -> assertThrows(
+                        Exception.class, () -> service.save(ComodoUtil.factoryDto(atual.getUsuario()))
+                ),
                () -> assertThrows(
                        Exception.class, () -> service.save(ComodoUtil.factoryDto(UUID.fromString(USUARIO), ComodoUtil.NOME))
                )

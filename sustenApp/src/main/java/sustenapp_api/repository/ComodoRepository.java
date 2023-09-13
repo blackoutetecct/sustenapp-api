@@ -10,5 +10,7 @@ import java.util.UUID;
 
 @Repository
 public interface ComodoRepository extends JpaRepository<ComodoModel, UUID> {
+    boolean existsByUsuarioAndNome(UUID usuario, String nome);
+    boolean existsByIdAndNome(UUID id, String nome);
     Optional<List<ComodoModel>> findAllByUsuario(UUID usuario);
 }

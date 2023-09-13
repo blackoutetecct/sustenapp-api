@@ -16,30 +16,23 @@ public class EnderecoValid {
     private final RestTemplate cliente;
 
     public boolean isValid(EnderecoDto value) {
-        return verifyEndereco(value);
+        return verifyEndereco(
+                value.getCep(), value.getCidade(), value.getEstado()
+        );
     }
 
     public boolean isValid(EnderecoPutDto value) {
-        return verifyEndereco(value);
+        return verifyEndereco(
+                value.getCep(), value.getCidade(), value.getEstado()
+        );
     }
 
-    private boolean verifyEndereco(EnderecoDto endereco) {
-        Endereco consultaCep = consultaCEP(endereco.getCep());
+    private boolean verifyEndereco(String cep, String cidade, String estado) {
+        Endereco consultaCep = consultaCEP(cep);
 
         return Stream.of(
-                removeEspeciais(consultaCep.logradouro).equalsIgnoreCase(removeEspeciais(endereco.getLogradouro())),
-                removeEspeciais(consultaCep.localidade).equalsIgnoreCase(removeEspeciais(endereco.getCidade())),
-                removeEspeciais(consultaCep.uf).equalsIgnoreCase(removeEspeciais(endereco.getEstado()))
-        ).allMatch(valor -> valor.equals(true));
-    }
-
-    private boolean verifyEndereco(EnderecoPutDto endereco) {
-        Endereco consultaCep = consultaCEP(endereco.getCep());
-
-        return Stream.of(
-                removeEspeciais(consultaCep.logradouro).equalsIgnoreCase(removeEspeciais(endereco.getLogradouro())),
-                removeEspeciais(consultaCep.localidade).equalsIgnoreCase(removeEspeciais(endereco.getCidade())),
-                removeEspeciais(consultaCep.uf).equalsIgnoreCase(removeEspeciais(endereco.getEstado()))
+                removeEspeciais(consultaCep.localidade).equalsIgnoreCase(removeEspeciais(cidade)),
+                removeEspeciais(consultaCep.uf).equalsIgnoreCase(removeEspeciais(estado))
         ).allMatch(valor -> valor.equals(true));
     }
 
@@ -49,5 +42,5 @@ public class EnderecoValid {
         ).getBody();
     }
 
-    private record Endereco (String logradouro, String localidade, String uf) { }
+    private record Endereco (String localidade, String uf) { }
 }

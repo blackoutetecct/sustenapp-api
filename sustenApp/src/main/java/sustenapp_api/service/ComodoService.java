@@ -4,10 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sustenapp_api.component.rule.Validation;
-import sustenapp_api.component.validation.ComodoExists;
-import sustenapp_api.component.validation.NotEmpty;
-import sustenapp_api.component.validation.NotNull;
-import sustenapp_api.component.validation.UsuarioExists;
+import sustenapp_api.component.validation.*;
 import sustenapp_api.dto.POST.ComodoDto;
 import sustenapp_api.dto.PUT.ComodoPutDto;
 import sustenapp_api.exception.BadRequestException;
@@ -29,11 +26,12 @@ public class ComodoService implements Validation<ComodoDto, ComodoPutDto> {
     private final UsuarioExists usuarioValidation;
     private final DispositivoRepository dispositivoRepository;
     private final ComodoExists comodoExists;
+    private final NomeComodoExists nomeComodoExists;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public ComodoModel save(ComodoDto comodo){
         validatedPost(comodo);
-        return comodoRepository.save(new ComodoMapper().toMapper(comodo));
+        return comodoRepository.save(ComodoMapper.toMapper(comodo));
     }
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
@@ -43,7 +41,7 @@ public class ComodoService implements Validation<ComodoDto, ComodoPutDto> {
 
     public ComodoModel update(ComodoPutDto comodo) {
         validatedPut(comodo);
-       return comodoRepository.save(new ComodoMapper().toMapper(comodo, findById(comodo.getId())));
+       return comodoRepository.save(ComodoMapper.toMapper(comodo, findById(comodo.getId())));
     }
 
     public ComodoModel findById(UUID comodo){
@@ -74,7 +72,8 @@ public class ComodoService implements Validation<ComodoDto, ComodoPutDto> {
                 NotNull.isValid(value.getNome()),
                 NotEmpty.isValid(value.getNome()),
                 NotNull.isValid(value.getUsuario()),
-                usuarioValidation.isValid(value.getUsuario())
+                usuarioValidation.isValid(value.getUsuario()),
+                nomeComodoExists.isValid(value.getUsuario(), value.getNome())
         ).allMatch(valor -> valor.equals(true));
     }
 
@@ -90,7 +89,8 @@ public class ComodoService implements Validation<ComodoDto, ComodoPutDto> {
                 NotNull.isValid(value.getId()),
                 NotNull.isValid(value.getNome()),
                 NotEmpty.isValid(value.getNome()),
-                comodoExists.isValid(value.getId())
+                comodoExists.isValid(value.getId()),
+                nomeComodoExists.isValidPut(value.getId(), value.getNome())
         ).allMatch(valor -> valor.equals(true));
     }
 

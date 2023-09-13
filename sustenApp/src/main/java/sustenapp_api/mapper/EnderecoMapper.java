@@ -6,13 +6,13 @@ import sustenapp_api.dto.PUT.EnderecoPutDto;
 import sustenapp_api.model.persist.EnderecoModel;
 
 public class EnderecoMapper {
-    public EnderecoModel toMapper(EnderecoDto objetoEntrada){
+    public static EnderecoModel toMapper(EnderecoDto objetoEntrada){
         EnderecoModel objetoSaida = new EnderecoModel();
         BeanUtils.copyProperties(objetoEntrada, objetoSaida);
         return objetoSaida;
     }
 
-    public EnderecoModel toMapper(EnderecoPutDto objetoEntrada, EnderecoModel objetoSaida){
+    public static EnderecoModel toMapper(EnderecoPutDto objetoEntrada, EnderecoModel objetoSaida){
         BeanUtils.copyProperties(objetoEntrada, objetoSaida);
         return objetoSaida;
     }

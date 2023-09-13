@@ -8,7 +8,7 @@ import sustenapp_api.model.persist.TarifaModel;
 import sustenapp_api.model.type.RecursoTipo;
 
 public class TarifaMapper {
-    public TarifaModel toMapper(TarifaDto objetoEntrada){
+    public static TarifaModel toMapper(TarifaDto objetoEntrada){
         return TarifaModel
                 .builder()
                 .preco(objetoEntrada.getPreco())
@@ -18,7 +18,7 @@ public class TarifaMapper {
                 .build();
     }
 
-    public TarifaModel toMapper(TarifaPutDto objetoEntrada, TarifaModel objetoSaida){
+    public static TarifaModel toMapper(TarifaPutDto objetoEntrada, TarifaModel objetoSaida){
         BeanUtils.copyProperties(objetoEntrada, objetoSaida);
         return objetoSaida;
     }

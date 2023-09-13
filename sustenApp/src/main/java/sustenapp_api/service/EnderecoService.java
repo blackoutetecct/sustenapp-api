@@ -28,9 +28,9 @@ public class EnderecoService implements Validation<EnderecoDto, EnderecoPutDto> 
     private final EnderecoValid enderecoValid;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
-    public EnderecoModel save(@Valid EnderecoDto endereco){
+    public EnderecoModel save(EnderecoDto endereco){
         validatedPost(endereco);
-        return enderecoRepository.save(new EnderecoMapper().toMapper(endereco));
+        return enderecoRepository.save(EnderecoMapper.toMapper(endereco));
     }
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
@@ -40,7 +40,7 @@ public class EnderecoService implements Validation<EnderecoDto, EnderecoPutDto> 
 
     public EnderecoModel update(EnderecoPutDto endereco){
         validatedPut(endereco);
-        return enderecoRepository.save(new EnderecoMapper().toMapper(endereco, findById(endereco.getId())));
+        return enderecoRepository.save(EnderecoMapper.toMapper(endereco, findById(endereco.getId())));
     }
 
     public EnderecoModel findById(UUID endereco){

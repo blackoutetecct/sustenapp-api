@@ -11,5 +11,4 @@ public class RecursoPutDto {
     private UUID id;
     private UUID tarifa;
     private boolean renovavel;
-    private String tipo;
 }

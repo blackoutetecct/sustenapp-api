@@ -15,4 +15,10 @@ public class ControllerException {
     public ResponseEntity<ResponseBody> returnException(BadRequestException exception){
         return ResponseEntity.status(exception.getCorpoResposta().getStatus()).body(exception.getCorpoResposta());
     }
+
+    @ExceptionHandler({NotFoundException.class})
+    public ResponseEntity<ResponseBody> returnException(NotFoundException exception){
+        return ResponseEntity.status(exception.getCorpoResposta().getStatus()).body(exception.getCorpoResposta());
+    }
 }
+

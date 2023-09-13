@@ -31,7 +31,7 @@ public class PreferenciaService implements Validation<PreferenciaDto, Preferenci
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public PreferenciaModel save(PreferenciaDto preferencia){
         validatedPost(preferencia);
-        return preferenciaRepository.save(new PreferenciaMapper().toMapper(preferencia));
+        return preferenciaRepository.save(PreferenciaMapper.toMapper(preferencia));
     }
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
@@ -41,7 +41,7 @@ public class PreferenciaService implements Validation<PreferenciaDto, Preferenci
 
     public PreferenciaModel update(PreferenciaPutDto preferencia){
         validatePut(preferencia);
-        return preferenciaRepository.save(new PreferenciaMapper().toMapper(preferencia, findById(preferencia.getId())));
+        return preferenciaRepository.save(PreferenciaMapper.toMapper(preferencia, findById(preferencia.getId())));
     }
 
     public PreferenciaModel findById(UUID preferencia){

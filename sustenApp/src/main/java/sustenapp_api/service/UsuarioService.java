@@ -1,11 +1,9 @@
 package sustenapp_api.service;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import sustenapp_api.component.rule.ValidationPost;
-import sustenapp_api.component.rule.ValidationPut;
+import sustenapp_api.component.rule.Validation;
 import sustenapp_api.component.validation.*;
 import sustenapp_api.dto.POST.UsuarioDto;
 import sustenapp_api.dto.PUT.UsuarioPutDto;
@@ -24,7 +22,7 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class UsuarioService implements ValidationPost<UsuarioDto>, ValidationPut<UsuarioPutDto> {
+public class UsuarioService implements Validation<UsuarioDto, UsuarioPutDto> {
     private final UsuarioRepository usuarioRepository;
     private final EnderecoRepository enderecoRepository;
     private final TelefoneRepository telefoneRepository;
@@ -35,7 +33,7 @@ public class UsuarioService implements ValidationPost<UsuarioDto>, ValidationPut
     public UsuarioModel save(UsuarioDto usuario){
         validatedPost(usuario);
         verifyExistsEmailOrCPF(usuario.getEmail(), usuario.getCpf());
-        return usuarioRepository.save(new UsuarioMapper().toMapper(usuario));
+        return usuarioRepository.save(UsuarioMapper.toMapper(usuario));
     }
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
@@ -45,7 +43,7 @@ public class UsuarioService implements ValidationPost<UsuarioDto>, ValidationPut
 
     public UsuarioModel update(UsuarioPutDto usuario){
         validatePut(usuario);
-        return usuarioRepository.save(new UsuarioMapper().toMapper(usuario, findById(usuario.getId())));
+        return usuarioRepository.save(UsuarioMapper.toMapper(usuario, findById(usuario.getId())));
     }
 
     public UsuarioModel findById(UUID usuario){

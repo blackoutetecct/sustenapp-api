@@ -28,9 +28,9 @@ public class TarifaService implements Validation<TarifaDto, TarifaPutDto>  {
     private final TarifaExists tarifaExists;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
-    public TarifaModel save(@Valid TarifaDto tarifaDto){
+    public TarifaModel save(TarifaDto tarifaDto){
         validatedPost(tarifaDto);
-        var tarifa = new TarifaMapper().toMapper(tarifaDto);
+        var tarifa = TarifaMapper.toMapper(tarifaDto);
         verifyDate(tarifa);
 
         return tarifaRepository.save(tarifa);
@@ -46,7 +46,7 @@ public class TarifaService implements Validation<TarifaDto, TarifaPutDto>  {
         tarifaRepository.save(clone(findLast()));
     }
 
-    public TarifaModel findById(UUID tarifa){
+    public TarifaModel findById(UUID tarifa) {
         return tarifaRepository.findById(tarifa).orElseThrow(
                 () -> new NotFoundException("TARIFA")
         );

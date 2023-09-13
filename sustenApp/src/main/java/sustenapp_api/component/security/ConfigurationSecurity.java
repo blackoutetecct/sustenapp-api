@@ -33,12 +33,14 @@ public class ConfigurationSecurity {
                 .httpBasic(withDefaults())
                 .authorizeHttpRequests(
                         auth ->
-                                auth
+                                auth.requestMatchers("/**").permitAll()
+                                        /*
                                         .requestMatchers("/tarifa**", "/metrica").hasAnyRole("ADMINSTRADOR")
                                         .requestMatchers("/recurso**", "/comodo**", "/consumo**", "/dispositivo**", "/preferencia**").hasAnyRole("USUARIO")
                                         .requestMatchers("/endereco**", "/telefone**").hasAnyRole("SUPORTE", "USUARIO")
                                         .requestMatchers("/auth","/usuario**", "/recuperacao**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                         .anyRequest().authenticated()
+                                         */
                 )
                 .headers().frameOptions().disable().and()
                 .cors().disable()

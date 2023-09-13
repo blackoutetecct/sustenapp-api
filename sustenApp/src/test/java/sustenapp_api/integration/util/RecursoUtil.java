@@ -51,7 +51,7 @@ public class RecursoUtil {
     }
 
     public static RecursoPutDto factoryPutDto(UUID id) {
-        return RecursoPutDto.builder().id(id).renovavel(RENOVAVEL).tipo("TESTE").build();
+        return RecursoPutDto.builder().id(id).renovavel(RENOVAVEL).build();
     }
 
     public static RecursoDto factoryDto(UUID usuario, UUID tarifa, String tipo, boolean renovavel) {
@@ -59,7 +59,6 @@ public class RecursoUtil {
                 .builder()
                 .usuario(usuario)
                 .tarifa(tarifa)
-                .tipo(tipo)
                 .renovavel(renovavel)
                 .build();
     }

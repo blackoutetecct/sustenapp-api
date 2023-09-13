@@ -6,13 +6,13 @@ import sustenapp_api.dto.PUT.TelefonePutDto;
 import sustenapp_api.model.persist.TelefoneModel;
 
 public class TelefoneMapper {
-    public TelefoneModel toMapper(TelefoneDto objetoEntrada){
+    public static TelefoneModel toMapper(TelefoneDto objetoEntrada){
         TelefoneModel objetoSaida = new TelefoneModel();
         BeanUtils.copyProperties(objetoEntrada, objetoSaida);
         return objetoSaida;
     }
 
-    public TelefoneModel toMapper(TelefonePutDto objetoEntrada, TelefoneModel objetoSaida){
+    public static TelefoneModel toMapper(TelefonePutDto objetoEntrada, TelefoneModel objetoSaida){
         BeanUtils.copyProperties(objetoEntrada, objetoSaida);
         return objetoSaida;
     }

@@ -40,7 +40,7 @@ public class EnderecoController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<EnderecoModel>> listAllByUsuario(UUID usuario) {
+    public ResponseEntity<List<EnderecoModel>> listAllByUsuario(@RequestParam UUID usuario) {
         return ResponseEntity.status(HttpStatus.OK).body(enderecoService.listAllByUsuario(usuario));
     }
 }

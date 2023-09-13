@@ -9,10 +9,13 @@ import org.springframework.stereotype.Service;
 import sustenapp_api.component.dependency.EmailDependency;
 import sustenapp_api.component.treatment.EmailTreatment;
 import sustenapp_api.component.validation.EmailExists;
+import sustenapp_api.component.validation.EmailRecuperacaoExists;
 import sustenapp_api.component.validation.RecuperacaoExists;
 import sustenapp_api.dto.POST.EmailDto;
 import sustenapp_api.dto.PUT.RecuperacaoDto;
+import sustenapp_api.exception.BadRequestException;
 import sustenapp_api.exception.ExceptionGeneric;
+import sustenapp_api.exception.NotFoundException;
 import sustenapp_api.model.dynamic.RecuperacaoModel;
 import sustenapp_api.repository.RecuperacaoRepository;
 import sustenapp_api.repository.UsuarioRepository;
@@ -24,15 +27,15 @@ import java.util.Random;
 public class RecuperacaoService {
     private final RecuperacaoRepository recuperacaoRepository;
     private final UsuarioRepository usuarioRepository;
-    private final EmailExists emailExists;
     private final RecuperacaoExists recuperacaoExists;
+    private final EmailRecuperacaoExists emailRecuperacaoExists;
     private final EmailDependency emailDependency;
     private final EmailTreatment emailTreatment;
 
     public RecuperacaoModel check(String email) {
-        RecuperacaoModel recuperacao = (emailExists.isValid(email)) ? findCodigo(email) : save(email);
-        sendEmail(recuperacao);
+        RecuperacaoModel recuperacao = (emailRecuperacaoExists.isValid(email)) ? findCodigo(email) : save(email);
 
+        sendEmail(recuperacao);
         return recuperacao;
     }
 
@@ -69,7 +72,7 @@ public class RecuperacaoService {
 
     public RecuperacaoModel findCodigo(String email) {
         return recuperacaoRepository.findByEmail(email).orElseThrow(
-                () -> new ExceptionGeneric("", "", 404)
+                () -> new NotFoundException("CODIGO DE RECUPERACAO")
         );
     }
 
@@ -82,7 +85,7 @@ public class RecuperacaoService {
 
     private void changeUsuario(RecuperacaoDto recuperacao) {
         var usuario = usuarioRepository.findByEmail(recuperacao.getEmail()).orElseThrow(
-                () -> new ExceptionGeneric("", "", 404)
+                () -> new NotFoundException("RECUPERACAO")
         );
 
         usuario.setSenha(recuperacao.getSenha());
@@ -95,11 +98,11 @@ public class RecuperacaoService {
 
     private void verifyExistsEmailAndCodigo(String email, String codigo) {
         if (recuperacaoExists.isValid(email, codigo))
-            throw new ExceptionGeneric("", "", 404);
+            throw new BadRequestException("RECUPERACAO");
     }
 
     private void verifyExistsUsuario(String email){
-        if(!emailExists.isValid(email))
-            throw new ExceptionGeneric("", "", 404);
+        if(!emailRecuperacaoExists.isValid(email))
+            throw new NotFoundException("USUARIO");
     }
 }
