@@ -134,5 +134,5 @@ https://sustenapp-api-production.up.railway.app
 ### DOCUMENTACAO DA API
 
 ```
-<servidor>/swagger-ui/index.html
+https://sustenapp-api-production.up.railway.app/swagger-ui/index.html
 ```
