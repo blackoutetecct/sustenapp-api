@@ -2,10 +2,15 @@ package sustenapp_api.component.dependency;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 
 public class DateDependency {
     public static LocalDateTime getDate() {
         return LocalDateTime.now();
+    }
+
+    public static Calendar getDateCalendar() {
+        return Calendar.getInstance();
     }
 
     private static DateTimeFormatter formatter(String pattern) {

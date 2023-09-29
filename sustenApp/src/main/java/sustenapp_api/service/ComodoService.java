@@ -26,7 +26,7 @@ public class ComodoService implements Validation<ComodoDto, ComodoPutDto> {
     private final UsuarioExists usuarioValidation;
     private final DispositivoRepository dispositivoRepository;
     private final ComodoExists comodoExists;
-    private final NomeComodoExists nomeComodoExists;
+    private final NomeComodoNotExists nomeComodoExists;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public ComodoModel save(ComodoDto comodo){

@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class NomeComodoExists {
+public class NomeComodoNotExists {
     private final ComodoRepository comodoRepository;
 
     public boolean isValid(UUID usuario, String nome) {

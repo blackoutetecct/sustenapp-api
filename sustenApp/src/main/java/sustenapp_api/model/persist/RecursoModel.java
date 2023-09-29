@@ -41,5 +41,8 @@ public class RecursoModel implements Serializable {
     private Double valorEstimado;
 
     @Transient
-    private Double mediaConsumo;
+    private Double mediaConsumoDiario;
+
+    @Transient
+    private Double mediaConsumoSemanal;
 }

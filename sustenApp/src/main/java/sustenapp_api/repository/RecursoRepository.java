@@ -13,7 +13,7 @@ import java.util.UUID;
 @Repository
 public interface RecursoRepository extends JpaRepository<RecursoModel, UUID> {
     Optional<List<RecursoModel>> findAllByUsuario(UUID usuario);
-    boolean existsByUsuario(UUID usuario);
+    boolean existsByUsuarioAndTipo(UUID usuario, String tipo);
 
     @Query(nativeQuery = true, value =
             "SELECT * FROM recurso WHERE usuario = :usuario AND tipo = :tipo AND renovavel = :renovavel AND data = (SELECT MAX(recurso.data) FROM recurso WHERE usuario = :usuario)"

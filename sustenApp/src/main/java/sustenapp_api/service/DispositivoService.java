@@ -23,6 +23,7 @@ public class DispositivoService implements Validation<DispositivoDto, Dispositiv
     private final DispositivoRepository dispositivoRepository;
     private final ComodoExists comodoExists;
     private final DispositivoExists dispositivoExists;
+    private final NomeDispositivoNotExists nomeDispositivoNotExists;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public DispositivoModel save(DispositivoDto dispositivo){
@@ -53,7 +54,8 @@ public class DispositivoService implements Validation<DispositivoDto, Dispositiv
                 NotNull.isValid(value.getPorta()),
                 Positive.isValid(value.getPorta()),
                 NotNull.isValid(value.getComodo()),
-                comodoExists.isValid(value.getComodo())
+                comodoExists.isValid(value.getComodo()),
+                nomeDispositivoNotExists.isValid(value.getComodo(), value.getNome())
         ).allMatch(valor -> valor.equals(true));
     }
 
@@ -72,7 +74,8 @@ public class DispositivoService implements Validation<DispositivoDto, Dispositiv
                 NotNull.isValid(value.getComodo()),
                 NotEmpty.isValid(value.getNome()),
                 comodoExists.isValid(value.getComodo()),
-                dispositivoExists.isValid(value.getId())
+                dispositivoExists.isValid(value.getId()),
+                nomeDispositivoNotExists.isValidPut(value.getId(), value.getNome())
         ).allMatch(valor -> valor.equals(true));
     }
 

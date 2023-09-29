@@ -10,5 +10,7 @@ import java.util.UUID;
 
 @Repository
 public interface DispositivoRepository extends JpaRepository<DispositivoModel, UUID> {
+    boolean existsByIdAndNome(UUID id, String nome);
+    boolean existsByComodoAndNome(UUID comodo, String nome);
     Optional<List<DispositivoModel>> findAllByComodo(UUID comodo);
 }

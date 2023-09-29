@@ -1,7 +1,6 @@
 package sustenapp_api.service;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sustenapp_api.component.dependency.DateDependency;
@@ -14,10 +13,10 @@ import sustenapp_api.exception.ExceptionGeneric;
 import sustenapp_api.exception.NotFoundException;
 import sustenapp_api.mapper.RecursoMapper;
 import sustenapp_api.model.persist.RecursoModel;
-import sustenapp_api.model.type.RecursoTipo;
 import sustenapp_api.repository.RecursoRepository;
 import sustenapp_api.repository.TarifaRepository;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -30,6 +29,7 @@ public class RecursoService implements Validation<RecursoDto, RecursoPutDto>  {
     private final RecursoMapper recursoMapper;
     private final UsuarioExists usuarioValidation;
     private final TarifaExists tarifaValidation;
+    private final RecursoValid recursoValid;
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public RecursoModel save(RecursoDto recursoDto){
@@ -67,8 +67,12 @@ public class RecursoService implements Validation<RecursoDto, RecursoPutDto>  {
                 recurso.getConsumo() * tarifaRepository.findById(recurso.getTarifa()).get().getPreco()
         );
 
-        recurso.setMediaConsumo(
+        recurso.setMediaConsumoDiario(
                 recurso.getConsumo() / DateDependency.getDate().getDayOfMonth()
+        );
+
+        recurso.setMediaConsumoSemanal(
+                recurso.getConsumo() / DateDependency.getDateCalendar().get(Calendar.WEEK_OF_MONTH)
         );
 
         return recurso;
@@ -93,12 +97,8 @@ public class RecursoService implements Validation<RecursoDto, RecursoPutDto>  {
     }
 
     private void verifyUsuarioAndDate(RecursoModel recurso) {
-        if(!(checkDate(recurso)) || !(existsUsuario(recurso.getUsuario())))
+        if(!(checkDate(recurso)))
             throw new BadRequestException("RECURSO");
-    }
-
-    private boolean existsUsuario(UUID usuario){
-        return recursoRepository.existsByUsuario(usuario);
     }
 
     private boolean checkDate(RecursoModel recurso) {
@@ -114,7 +114,8 @@ public class RecursoService implements Validation<RecursoDto, RecursoPutDto>  {
                 NotEmpty.isValid(value.getTipo()),
                 Size.isValid(value.getTipo(), 7, 8),
                 NotNull.isValid(value.getUsuario()),
-                usuarioValidation.isValid(value.getUsuario())
+                usuarioValidation.isValid(value.getUsuario()),
+                recursoValid.isValid(value.getUsuario(), value.getTipo())
         ).allMatch(valor -> valor.equals(true));
     }
 
