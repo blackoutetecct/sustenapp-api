@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import sustenapp_api.model.persist.RecursoModel;
+import sustenapp_api.model.type.RecursoTipo;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Repository
 public interface RecursoRepository extends JpaRepository<RecursoModel, UUID> {
     Optional<List<RecursoModel>> findAllByUsuario(UUID usuario);
-    boolean existsByUsuarioAndTipo(UUID usuario, String tipo);
+    boolean existsByUsuarioAndTipo(UUID usuario, RecursoTipo tipo);
 
     @Query(nativeQuery = true, value =
             "SELECT * FROM recurso WHERE usuario = :usuario AND tipo = :tipo AND renovavel = :renovavel AND data = (SELECT MAX(recurso.data) FROM recurso WHERE usuario = :usuario)"
