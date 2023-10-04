@@ -36,7 +36,7 @@ public class RecursoService implements Validation<RecursoDto, RecursoPutDto>  {
         validatedPost(recursoDto);
 
         var recurso = recursoMapper.toMapper(recursoDto);
-        verifyUsuarioAndDate(recurso);
+        //verifyDate(recurso);
         return recursoRepository.save(recurso);
     }
 
@@ -96,7 +96,7 @@ public class RecursoService implements Validation<RecursoDto, RecursoPutDto>  {
         return recurso;
     }
 
-    private void verifyUsuarioAndDate(RecursoModel recurso) {
+    private void verifyDate(RecursoModel recurso) {
         if(!(checkDate(recurso)))
             throw new BadRequestException("RECURSO");
     }

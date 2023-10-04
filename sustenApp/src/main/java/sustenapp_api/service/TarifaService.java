@@ -1,7 +1,6 @@
 package sustenapp_api.service;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,7 @@ public class TarifaService implements Validation<TarifaDto, TarifaPutDto>  {
     public TarifaModel save(TarifaDto tarifaDto){
         validatedPost(tarifaDto);
         var tarifa = TarifaMapper.toMapper(tarifaDto);
-        verifyDate(tarifa);
+        //verifyDate(tarifa);
 
         return tarifaRepository.save(tarifa);
     }
