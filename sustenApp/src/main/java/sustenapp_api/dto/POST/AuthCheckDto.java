@@ -1,10 +1,12 @@
 package sustenapp_api.dto.POST;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@NoArgsConstructor
+@SuperBuilder
 public class AuthCheckDto {
     private String token;
 }
