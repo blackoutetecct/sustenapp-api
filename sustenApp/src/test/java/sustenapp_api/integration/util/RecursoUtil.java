@@ -1,7 +1,6 @@
 package sustenapp_api.integration.util;
 
 import sustenapp_api.dto.POST.RecursoDto;
-import sustenapp_api.dto.PUT.EnderecoPutDto;
 import sustenapp_api.dto.PUT.RecursoPutDto;
 import sustenapp_api.model.persist.RecursoModel;
 import sustenapp_api.model.type.RecursoTipo;

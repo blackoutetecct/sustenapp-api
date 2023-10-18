@@ -2,7 +2,6 @@ package sustenapp_api.integration.util;
 
 import sustenapp_api.dto.POST.DispositivoDto;
 import sustenapp_api.dto.PUT.DispositivoPutDto;
-import sustenapp_api.dto.PUT.EnderecoPutDto;
 import sustenapp_api.model.persist.DispositivoModel;
 
 import java.util.UUID;
@@ -43,6 +42,12 @@ public class DispositivoUtil {
     public static DispositivoPutDto factoryPutDto(UUID id) {
         return DispositivoPutDto.builder().id(id).porta(PORTA).nome("TESTE").build();
     }
+
+    public static DispositivoPutDto factoryPutDto(UUID id, String nome, UUID comodo) {
+        return DispositivoPutDto.builder().id(UUID.fromString(String.valueOf(id))).comodo(comodo).porta(PORTA).nome(nome).build();
+    }
+
+
 
     public static DispositivoDto factoryDto(UUID comodo, String nome, int porta) {
         return DispositivoDto

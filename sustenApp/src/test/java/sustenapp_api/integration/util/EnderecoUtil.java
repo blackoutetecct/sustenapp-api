@@ -54,6 +54,11 @@ public class EnderecoUtil {
         return EnderecoPutDto.builder().id(id).estado("Teste").logradouro(LOGRADOURO).complemento(COMPLEMENTO).cep(CEP).cidade(CIDADE).build();
     }
 
+    public static EnderecoPutDto factoryPutDto(String estado, String logradouro, String complemento, String cep, String cidade) {
+        return EnderecoPutDto.builder().id(UUID.fromString(ID)).estado(estado).logradouro(logradouro).complemento(complemento).cep(cep).cidade(cidade).build();
+    }
+
+
     public static EnderecoDto factoryDto(UUID usuario, String logradouro, String complemento, String cep, String cidade, String estado) {
         return EnderecoDto
                 .builder()

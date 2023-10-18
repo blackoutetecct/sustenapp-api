@@ -32,4 +32,10 @@ public class UsuarioUtil {
     public static UsuarioPutDto factoryPutDto(UUID id) {
         return UsuarioPutDto.builder().id(id).nome("TESTADO").senha(SENHA).email(EMAIL).build();
     }
+
+    public static UsuarioPutDto factoryPutDto(String nome, String email) {
+        return UsuarioPutDto.builder().id(UUID.fromString(ID)).nome(nome).senha(SENHA).email(email).build();
+    }
+
+
 }

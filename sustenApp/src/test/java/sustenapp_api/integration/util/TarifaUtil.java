@@ -1,7 +1,6 @@
 package sustenapp_api.integration.util;
 
 import sustenapp_api.dto.POST.TarifaDto;
-
 import sustenapp_api.model.persist.TarifaModel;
 import sustenapp_api.model.type.RecursoTipo;
 
