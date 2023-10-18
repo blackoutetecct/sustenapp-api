@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import sustenapp_api.dto.POST.DispositivoDto;
+import sustenapp_api.dto.PUT.DispositivoPutDto;
 import sustenapp_api.integration.util.ComodoUtil;
 import sustenapp_api.integration.util.UsuarioUtil;
 import sustenapp_api.repository.ComodoRepository;
@@ -67,12 +68,17 @@ public class DispositivoIT {
                         Exception.class, () -> service.save(factoryDto(comodo, null, PORTA))
                 ),
                 () -> assertThrows(
-                        // PositivoOrZero
+                        // Positive
                         Exception.class, () -> service.save(factoryDto(comodo, NOME, 0))
                 ),
                 () -> assertThrows(
-                        // ComodoVerify
+                        // comodoExists
                         Exception.class, () -> service.save(factoryDto(UUID.fromString(ID), NOME, PORTA))
+                ),
+
+                () -> assertThrows(
+                        // nomeDispositivoNotExists
+                        Exception.class, () -> service.save(factoryDto(UUID.fromString(ID), "teste", PORTA))
                 )
         );
     }
@@ -100,15 +106,27 @@ public class DispositivoIT {
     @DisplayName("Testes de Cobertura e Validacao do Metodo Update")
     public void update() {
         var atual = service.save(factoryDto(comodo));
-        var modificado = service.update(factoryPutDto(atual.getId()));
+        var modificado = service.update(factoryPutDto(atual.getId(), "teste4", comodo));
 
         assertAll(
                 () -> assertNotEquals(atual, modificado),
                 () -> assertNotEquals(atual.getNome(), modificado.getNome()),
                 () -> assertEquals(atual.getId(), modificado.getId()),
-
                 () -> assertThrows(
+                        //dispositivoExists
                         Exception.class, () -> service.update(factoryPutDto(UUID.fromString(ComodoUtil.ID)))
+                ),
+                () -> assertThrows(
+                        //notNull e NotEmpy
+                        Exception.class, () -> service.update(DispositivoPutDto.builder().build())
+                ),
+                () -> assertThrows(
+                        //nomeDispositivoNotExists
+                        Exception.class, () -> service.update(factoryPutDto(UUID.fromString(ID), "TESTE", UUID.fromString(ComodoUtil.ID)))
+                ),
+                () -> assertThrows(
+                        //comodoExists
+                        Exception.class, () -> service.update(factoryPutDto(UUID.fromString(ID),NOME, UUID.fromString(ComodoUtil.ID_FALSE)))
                 )
         );
     }

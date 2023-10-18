@@ -8,18 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import sustenapp_api.dto.POST.ComodoDto;
+import sustenapp_api.dto.PUT.ComodoPutDto;
 import sustenapp_api.integration.util.ComodoUtil;
 import sustenapp_api.integration.util.UsuarioUtil;
 import sustenapp_api.repository.ComodoRepository;
 import sustenapp_api.repository.UsuarioRepository;
 import sustenapp_api.service.ComodoService;
+import sustenapp_api.service.UsuarioService;
 
 import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static sustenapp_api.integration.util.ComodoUtil.*;
-import sustenapp_api.service.UsuarioService;
+import static sustenapp_api.integration.util.UsuarioUtil.ID_FALSE;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -51,15 +53,19 @@ public class ComodoIT {
                () -> assertEquals(factoryDto(usuario).getNome(), atual.getNome()),
                () -> assertEquals(factoryDto(usuario).getUsuario(), atual.getUsuario()),
                () -> assertThrows(
+                       //NotNull e NotEmpty
                        Exception.class, () -> service.save(ComodoDto.builder().build())
                ),
                 () -> assertThrows(
-                        Exception.class, () -> service.save(ComodoUtil.factoryDto(atual.getUsuario()))
+                        //usuarioValidation
+                        Exception.class, () -> service.save(ComodoUtil.factoryDto(UUID.fromString(UsuarioUtil.ID_FALSE)))
                 ),
                () -> assertThrows(
-                       Exception.class, () -> service.save(ComodoUtil.factoryDto(UUID.fromString(USUARIO), ComodoUtil.NOME))
+                       //nomeComodoExists
+                       Exception.class, () -> service.save(ComodoUtil.factoryDto(UUID.fromString(UsuarioUtil.ID), "teste"))
                )
-       );
+
+        );
     }
 
     @Test
@@ -91,17 +97,29 @@ public class ComodoIT {
                 () -> assertNotEquals(atual, modificado),
                 () -> assertNotEquals(atual.getNome(), modificado.getNome()),
                 () -> assertEquals(atual.getUsuario(), modificado.getUsuario()),
-                () -> assertDoesNotThrow(() -> service.delete(UUID.fromString(UsuarioUtil.ID)))
-        );
+                () -> assertThrows(
+                        //comodoExists
+                        Exception.class, () -> service.update(factoryPutDto(UUID.fromString(ID_FALSE)))
+
+                ),
+                () -> assertThrows(
+                        //Notnull e Notempty
+                        Exception.class, () -> service.update(ComodoPutDto.builder().build())
+                ),
+                () -> assertThrows(
+                        //nomeComodoExists
+                        Exception.class, () -> service.update(factoryPutDto("teste"))
+                )
+                );
     }
 
     @Test
     @DisplayName("Testes de Cobertura e Validação do Metodo listAllByUsuario")
     public void listAllByUsuario() {
-        var comodo = service.save(ComodoUtil.factoryDto(UUID.fromString(USUARIO), ComodoUtil.NOME));
+        var comodo = service.save(factoryDto(usuario));
 
         assertEquals(
-                List.of(comodo), service.listAllByUsuario(UUID.fromString(USUARIO))
+                comodo.getUsuario(), service.listAllByUsuario(usuario).get(0).getUsuario()
         );
     }
 

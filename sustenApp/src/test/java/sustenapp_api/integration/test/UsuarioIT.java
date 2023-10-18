@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import sustenapp_api.dto.POST.UsuarioDto;
+import sustenapp_api.dto.PUT.UsuarioPutDto;
 import sustenapp_api.integration.util.UsuarioUtil;
 import sustenapp_api.repository.UsuarioRepository;
 import sustenapp_api.service.UsuarioService;
@@ -40,27 +41,27 @@ public class UsuarioIT {
                 () -> assertEquals(factoryDto().getTipo(), atual.getTipo().toString()),
 
                 () -> assertThrows(
-                        // @NotNull e @NotEmpty
+                        //NotNull e NotEmpty
                         Exception.class, () -> service.save(UsuarioDto.builder().build())
                 ),
                 () -> assertThrows(
-                        // @StringVerify
+                        //StringValid
                         Exception.class, () -> service.save(UsuarioUtil.factoryDto(NOME.concat("1"), CPF, SENHA, EMAIL, TIPO))
                 ),
                 () -> assertThrows(
-                        // @EmailValid
+                        //EmailValid
                         Exception.class, () -> service.save(UsuarioUtil.factoryDto(NOME, CPF, SENHA, "TESTE", TIPO))
                 ),
                 () -> assertThrows(
-                        // @CPFVerify e @CPFValid -> suspeito
+                        //CPFValid e CPFValid -> suspeito
                         Exception.class, () -> service.save(UsuarioUtil.factoryDto(NOME, "123456789", SENHA, EMAIL, TIPO))
                 ),
                 () -> assertThrows(
-                        // PerfilTipo.getRecurso()
+                        // PerfilTipo.getRecurso
                         Exception.class, () -> service.save(UsuarioUtil.factoryDto(NOME, CPF, SENHA, EMAIL, "TESTE"))
                 ),
                 () -> assertThrows(
-                        // verifyExistsEmailOrCPF()
+                        // verifyExistsEmailOrCPF
                         Exception.class, () -> service.save(factoryDto())
                 )
         );
@@ -82,10 +83,28 @@ public class UsuarioIT {
                 () -> assertNotEquals(atual, modificado),
                 () -> assertNotEquals(atual.getNome(), modificado.getNome()),
                 () -> assertEquals(atual.getCpf(), modificado.getCpf()),
-
                 () -> assertThrows(
                         Exception.class, () -> {
+                            //usuarioExists
                             service.update(factoryPutDto(UUID.fromString(ID_FALSE)));
+                        }
+                ),
+                () -> assertThrows(
+                        Exception.class, () -> {
+                            //NotNull e NotEmpty
+                            service.update(UsuarioPutDto.builder().build());
+                        }
+                ),
+                () -> assertThrows(
+                        Exception.class, () -> {
+                            //StringValid
+                            service.update(UsuarioUtil.factoryPutDto(NOME.concat("1"), EMAIL));
+                        }
+                ),
+                () -> assertThrows(
+                        Exception.class, () -> {
+                            //EmailValid
+                            service.update(UsuarioUtil.factoryPutDto(NOME, "teste"));
                         }
                 )
         );

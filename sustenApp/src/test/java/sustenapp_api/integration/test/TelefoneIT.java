@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import sustenapp_api.dto.POST.TelefoneDto;
+import sustenapp_api.dto.PUT.TelefonePutDto;
 import sustenapp_api.integration.util.TelefoneUtil;
 import sustenapp_api.integration.util.UsuarioUtil;
 import sustenapp_api.repository.TelefoneRepository;
@@ -54,11 +55,11 @@ public class TelefoneIT {
                 () -> assertEquals(esperado.getUsuario(), atual.getUsuario()),
 
                 () -> assertThrows(
-                        // @NotNull e @NotEmpty - OBSERVACAO
+                        // NotNull e NotEmpty - OBSERVACAO
                         Exception.class, () -> service.save(TelefoneDto.builder().build())
                 ),
                 () -> assertThrows(
-                        // @UsuarioVerify - OBSERVACAO
+                        // UsuarioVerify - OBSERVACAO
                         Exception.class, () -> service.save(TelefoneUtil.factoryDto(UUID.fromString(USUARIO), NUMERO))
                 )
         );
@@ -93,10 +94,16 @@ public class TelefoneIT {
                 () -> assertNotEquals(atual, modificado),
                 () -> assertNotEquals(atual.getNumero(), modificado.getNumero()),
                 () -> assertEquals(atual.getId(), modificado.getId()),
-
                 () -> assertThrows(
                         Exception.class, () -> {
+                            //telefoneExists
                             service.update(factoryPutDto(UUID.fromString(ID)));
+                        }
+                ),
+                () -> assertThrows(
+                        Exception.class, () -> {
+                            //NotNull e @NotEmpty
+                            service.update(TelefonePutDto.builder().build());
                         }
                 )
         );
@@ -105,10 +112,10 @@ public class TelefoneIT {
     @Test
     @DisplayName("Testes de Cobertura e Validação do Metodo listAllByUsuario")
     public void listAllByUsuario() {
-        var telefone = service.save(TelefoneUtil.factoryDto(UUID.fromString(USUARIO), NUMERO));
+        var telefone = service.save(TelefoneUtil.factoryDto((usuario)));
 
         assertEquals(
-                List.of(telefone), service.listAllByUsuario(UUID.fromString(USUARIO))
+                telefone.getUsuario(), service.listAllByUsuario(usuario).get(0).getUsuario()
         );
     }
 

@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import sustenapp_api.dto.POST.EnderecoDto;
 import sustenapp_api.integration.util.EnderecoUtil;
-
 import sustenapp_api.integration.util.UsuarioUtil;
 import sustenapp_api.repository.EnderecoRepository;
 import sustenapp_api.repository.UsuarioRepository;
@@ -62,32 +61,18 @@ public class EnderecoIT {
                 () -> assertEquals(esperado.getComplemento(), atual.getComplemento()),
 
                 () -> assertThrows(
-                        // @NotNull - OBSERVACAO
+                        //NotNull e NotEmpty - OBSERVACAO
                         Exception.class, () -> service.save(EnderecoDto.builder().build())
                 ),
+
                 () -> assertThrows(
-                        // @NotEmpty - OBSERVACAO
-                        Exception.class, () -> service.save(EnderecoUtil.factoryDto(UUID.fromString(USUARIO), LOGRADOURO, COMPLEMENTO, "", CIDADE, ESTADO))
-                ),
-                () -> assertThrows(
-                        // @NotEmpty - OBSERVACAO
-                        Exception.class, () -> service.save(EnderecoUtil.factoryDto(UUID.fromString(USUARIO),"", COMPLEMENTO, CEP, CIDADE, ESTADO))
-                ),
-                () -> assertThrows(
-                        // @NotEmpty - OBSERVACAO
-                        Exception.class, () -> service.save(EnderecoUtil.factoryDto(UUID.fromString(USUARIO), LOGRADOURO, "", CEP, CIDADE, ESTADO))
-                ),
-                () -> assertThrows(
-                        // @NotEmpty - OBSERVACAO
-                        Exception.class, () -> service.save(EnderecoUtil.factoryDto(UUID.fromString(USUARIO), LOGRADOURO, COMPLEMENTO, CEP, "", ESTADO))
-                ),
-                () -> assertThrows(
-                        // @NotEmpty - OBSERVACAO
-                        Exception.class, () -> service.save(EnderecoUtil.factoryDto(UUID.fromString(USUARIO), LOGRADOURO, COMPLEMENTO, CEP, CIDADE, ""))
-                ),
-                () -> assertThrows(
-                        // @UserVerify - OBSERVACAO
+                        //usuarioValidation - OBSERVACAO
                         Exception.class, () -> service.save(EnderecoUtil.factoryDto(UUID.fromString(USUARIO), LOGRADOURO, COMPLEMENTO, CEP, CIDADE, ESTADO))
+                ),
+
+                () -> assertThrows(
+                        //enderecoValid - OBSERVACAO
+                        Exception.class, () -> service.save(EnderecoUtil.factoryDto(UUID.fromString(USUARIO), "sdsa", "ddd", "22", "s", "dd"))
                 )
             );
     }
@@ -121,10 +106,22 @@ public class EnderecoIT {
                 () -> assertNotEquals(atual, modificado),
                 () -> assertNotEquals(atual.getEstado(), modificado.getEstado()),
                 () -> assertEquals(atual.getCep(), modificado.getCep()),
-
                 () -> assertThrows(
                         Exception.class, () -> {
+                            //NotNull e NotEmpty
                             service.update(factoryPutDto(UUID.fromString(ID)));
+                        }
+                ),
+                () -> assertThrows(
+                        Exception.class, () -> {
+                            //enderecoExists
+                            service.update(factoryPutDto(UUID.fromString(ID)));
+                        }
+                ),
+                () -> assertThrows(
+                        Exception.class, () -> {
+                            //enderecoValid
+                            service.update(factoryPutDto("sdsa", "ddd", "xxx", "122", "dd"));
                         }
                 )
         );

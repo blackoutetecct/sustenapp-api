@@ -42,31 +42,30 @@ public class TarifaIT {
                 () -> assertEquals(factoryDto().getTipo(), atual.getTipo().toString()),
 
                 () -> assertThrows(
-                        // @NotNull e @NotEmpty - OBSERVACAO
+                        //NotNull e @NotEmpty - OBSERVACAO
                         Exception.class, () -> service.save(TarifaDto.builder().build())
                 ),
 
                 () -> assertThrows(
-                       // @Size(max = 8)
+                       //Size(max = 8)
                         Exception.class, () -> service.save(TarifaUtil.factoryDto(PRECO, "TESTE1243", OBSERVACAO))
                 ),
 
                 () -> assertThrows(
-                       // @Size(min = 7)
+                       //Size(min = 7)
                         Exception.class, () -> service.save(TarifaUtil.factoryDto(PRECO, "TESTE1", OBSERVACAO))
                 ),
 
                 () -> assertThrows(
-                        // @Positive - OBSERVACAO
+                        //Positive - OBSERVACAO
                         Exception.class, () -> service.save(TarifaUtil.factoryDto(-1.0, TIPO, OBSERVACAO))
                 ),
 
                 () -> assertThrows(
-                        // @NotEmpty - OBSERVACAO
+                        //NotEmpty - OBSERVACAO
                         Exception.class, () -> service.save(TarifaUtil.factoryDto(PRECO, TIPO, ""))
                 )
         );
-
     }
 
     @Test
