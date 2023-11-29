@@ -33,7 +33,9 @@ public class DispositivoService implements Validation<DispositivoDto, Dispositiv
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public void delete(UUID dispositivo){
-        dispositivoRepository.deleteById(dispositivo);
+        try {
+            dispositivoRepository.deleteById(dispositivo);
+        } catch (Exception ignored) { }
     }
 
     public DispositivoModel update(DispositivoPutDto dispositivo){

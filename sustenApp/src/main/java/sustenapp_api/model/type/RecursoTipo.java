@@ -14,4 +14,14 @@ public enum RecursoTipo {
 
         throw new ExceptionGeneric("", "", 400);
     }
+
+    public static String getUnidadeMedida(String recurso){
+        if(recurso.equalsIgnoreCase("HIDRICO"))
+            return "M3";
+
+        if (recurso.equalsIgnoreCase("ELETRICO"))
+            return "KWh";
+
+        throw new ExceptionGeneric("", "", 400);
+    }
 }

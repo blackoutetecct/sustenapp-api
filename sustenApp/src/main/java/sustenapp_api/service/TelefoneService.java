@@ -37,7 +37,9 @@ public class TelefoneService implements Validation<TelefoneDto, TelefonePutDto> 
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public void delete(UUID telefone) {
-        telefoneRepository.deleteById(telefone);
+        try {
+            telefoneRepository.deleteById(telefone);
+        } catch (Exception ignored) { }
     }
 
     public TelefoneModel update(TelefonePutDto telefone) {

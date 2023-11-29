@@ -36,7 +36,9 @@ public class ComodoService implements Validation<ComodoDto, ComodoPutDto> {
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public void delete(UUID comodo){
-        comodoRepository.deleteById(comodo);
+        try {
+            comodoRepository.deleteById(comodo);
+        } catch (Exception ignored) { }
     }
 
     public ComodoModel update(ComodoPutDto comodo) {

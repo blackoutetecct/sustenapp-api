@@ -35,7 +35,9 @@ public class EnderecoService implements Validation<EnderecoDto, EnderecoPutDto> 
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public void delete(UUID endereco){
-        enderecoRepository.deleteById(endereco);
+        try {
+            enderecoRepository.deleteById(endereco);
+        } catch (Exception ignored) { }
     }
 
     public EnderecoModel update(EnderecoPutDto endereco){

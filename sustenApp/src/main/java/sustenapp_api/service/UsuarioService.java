@@ -38,7 +38,9 @@ public class UsuarioService implements Validation<UsuarioDto, UsuarioPutDto> {
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public void delete(UUID usuario){
-        usuarioRepository.deleteById(usuario);
+        try {
+            usuarioRepository.deleteById(usuario);
+        } catch (Exception ignored) { }
     }
 
     public UsuarioModel update(UsuarioPutDto usuario){

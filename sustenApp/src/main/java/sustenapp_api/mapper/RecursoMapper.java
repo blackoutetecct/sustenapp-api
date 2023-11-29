@@ -22,6 +22,7 @@ public class RecursoMapper {
                 .renovavel(objetoEntrada.isRenovavel())
                 .consumo(0.0)
                 .tipo(RecursoTipo.getRecurso(objetoEntrada.getTipo()))
+                .unidadeMedida(RecursoTipo.getUnidadeMedida(objetoEntrada.getTipo()))
                 .data(DateDependency.getDate())
                 .tarifa(tarifaService.findLast().getId())
                 .build();

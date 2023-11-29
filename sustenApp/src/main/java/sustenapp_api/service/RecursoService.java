@@ -42,7 +42,9 @@ public class RecursoService implements Validation<RecursoDto, RecursoPutDto>  {
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public void delete(UUID recurso){
-        recursoRepository.deleteById(recurso);
+        try {
+            recursoRepository.deleteById(recurso);
+        } catch (Exception ignored) { }
     }
 
     public RecursoModel update(RecursoPutDto recurso){

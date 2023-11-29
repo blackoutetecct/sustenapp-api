@@ -36,7 +36,9 @@ public class PreferenciaService implements Validation<PreferenciaDto, Preferenci
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public void delete(UUID preferencia) {
-        preferenciaRepository.deleteById(preferencia);
+        try {
+            preferenciaRepository.deleteById(preferencia);
+        } catch (Exception ignored) { }
     }
 
     public PreferenciaModel update(PreferenciaPutDto preferencia){

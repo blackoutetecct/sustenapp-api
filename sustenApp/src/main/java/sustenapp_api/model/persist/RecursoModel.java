@@ -37,6 +37,8 @@ public class RecursoModel implements Serializable {
     @Enumerated(EnumType.STRING)
     private RecursoTipo tipo;
 
+    private String unidadeMedida;
+
     @Transient
     private Double valorEstimado;
 

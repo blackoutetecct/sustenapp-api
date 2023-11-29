@@ -37,10 +37,12 @@ public class TarifaService implements Validation<TarifaDto, TarifaPutDto>  {
 
     @Transactional(rollbackOn = ExceptionGeneric.class)
     public void delete(UUID tarifa){
-        tarifaRepository.deleteById(tarifa);
+        try {
+            tarifaRepository.deleteById(tarifa);
+        } catch (Exception ignored) { }
     }
 
-    @Scheduled(cron = "* 01 00 1 * *")
+    @Scheduled(cron = "0 01 00 1 * *")
     public void factory() {
         tarifaRepository.save(clone(findLast()));
     }
